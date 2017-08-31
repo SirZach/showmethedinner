@@ -63,7 +63,7 @@ export class AppComponent implements OnInit {
     private zone: NgZone
   ) {}
 
-  displayedColumns: string[] = ['name', 'recipe', 'category', 'time', 'servings', 'meals'];
+  displayedColumns: string[] = ['name', 'category', 'time', 'servings', 'meals'];
   exampleDatabase = new ExampleDatabase();
   dataSource: ExampleDataSource | null;
 

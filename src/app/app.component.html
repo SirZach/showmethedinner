@@ -11,7 +11,7 @@
       </div>
     </md-toolbar>
   
-    <div class="demo-content">
+    <div class="content">
       <md-card>
         <md-card-content>
           <md-table #table [dataSource]="dataSource">
@@ -19,38 +19,34 @@
             <!--- Note that these columns can be defined in any order.
                   The actual rendered columns are set as a property on the row definition" -->
       
-            <!-- ID Column -->
             <ng-container cdkColumnDef="name">
               <md-header-cell *cdkHeaderCellDef> Name </md-header-cell>
-              <md-cell *cdkCellDef="let row">{{row.name}}</md-cell>
+              <md-cell *cdkCellDef="let row">
+                <a md-button [attr.href]="row.recipe" target="_blank">
+                  {{row.name}}
+                  <md-icon>open_in_new</md-icon>
+                </a>
+              </md-cell>
             </ng-container>
-      
-            <!-- Progress Column -->
-            <ng-container cdkColumnDef="recipe">
-              <md-header-cell *cdkHeaderCellDef> Recipe </md-header-cell>
-              <md-cell *cdkCellDef="let row">{{row.recipe}}</md-cell>
-            </ng-container>
-      
-            <!-- Name Column -->
+
             <ng-container cdkColumnDef="category">
-              <md-header-cell *cdkHeaderCellDef> Category </md-header-cell>
-              <md-cell *cdkCellDef="let row">{{row.category}}</md-cell>
+              <md-header-cell *cdkHeaderCellDef style="max-width: 80px;"> Category </md-header-cell>
+              <md-cell *cdkCellDef="let row" style="max-width: 80px;">{{row.category}}</md-cell>
             </ng-container>
       
-            <!-- Color Column -->
             <ng-container cdkColumnDef="time">
-              <md-header-cell *cdkHeaderCellDef>Time</md-header-cell>
-              <md-cell *cdkCellDef="let row"> {{row.time}} </md-cell>
+              <md-header-cell *cdkHeaderCellDef style="max-width: 80px;">Time</md-header-cell>
+              <md-cell *cdkCellDef="let row" style="max-width: 80px;"> {{row.time}} </md-cell>
             </ng-container>
       
             <ng-container cdkColumnDef="servings">
-              <md-header-cell *cdkHeaderCellDef>Servings</md-header-cell>
-              <md-cell *cdkCellDef="let row"> {{row.servings}} </md-cell>
+              <md-header-cell *cdkHeaderCellDef style="max-width: 80px;">Servings</md-header-cell>
+              <md-cell *cdkCellDef="let row" style="max-width: 80px;"> {{row.servings}} </md-cell>
             </ng-container>
       
             <ng-container cdkColumnDef="meals">
-              <md-header-cell *cdkHeaderCellDef>Meals</md-header-cell>
-              <md-cell *cdkCellDef="let row"> {{row.meals}} </md-cell>
+              <md-header-cell *cdkHeaderCellDef style="max-width: 40px;">Meals</md-header-cell>
+              <md-cell *cdkCellDef="let row" style="max-width: 40px;"> {{row.meals}} </md-cell>
             </ng-container>
       
             <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
