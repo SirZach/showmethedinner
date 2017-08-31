@@ -1,0 +1,17 @@
+html, body{
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif
+}
+
+a.active {
+  background-color: gray;
+}
+
+.demo-content {
+  padding: 8px;
+}
+
+.d-f { display: flex; }
+.fg-1 { flex-grow: 1; }
+.jc-c { justify-content: center; }
+.fd-c { flex-direction: column; }
