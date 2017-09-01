@@ -30,13 +30,34 @@ export class ExampleDatabase {
   /** Stream that emits whenever the data has been modified. */
   dataChange: BehaviorSubject<Dinner[]> = new BehaviorSubject<Dinner[]>([]);
   get data(): Dinner[] { return this.dataChange.value; }
+  set data(dinners) { this.dataChange.next(dinners); }
+
+  getRandomIndices(max: number): number[] {
+    let indices = [];
+
+    while (indices.length < 6) {
+      const randomnumber = Math.ceil(Math.random()*max)
+      
+      if (indices.includes(randomnumber)) continue;
+      indices[indices.length] = randomnumber;
+    }
+
+    return indices;
+  }
 
   constructor() {}
 
   addDinners($googleDrive: GoogleDriveService) {
     return $googleDrive.getSheet()
       .then(() => {
-        $googleDrive.sheet.rows.forEach((dinner) => {
+        const dinners = $googleDrive.sheet.rows;
+        const randomIndices = this.getRandomIndices(dinners.length - 1);
+
+        return dinners.filter((dinner, index) => randomIndices.includes(index));
+      })
+      .then((dinners: Dinner[]) => {
+        this.data = [];
+        dinners.forEach((dinner) => {
           const copiedData = this.data.slice();
           copiedData.push(dinner);
           this.dataChange.next(copiedData);
@@ -66,14 +87,16 @@ export class AppComponent implements OnInit {
   displayedColumns: string[] = ['name', 'category', 'time', 'servings', 'meals'];
   exampleDatabase = new ExampleDatabase();
   dataSource: ExampleDataSource | null;
+  loadingDinners: boolean = false;
 
   ngOnInit() {
     this.dataSource = new ExampleDataSource(this.exampleDatabase);
   }
 
   handleClick() {
-    // this.$googleDrive.getSheet();
+    this.loadingDinners = true;
     this.exampleDatabase.addDinners(this.$googleDrive)
+      .then(() => this.loadingDinners = false)
       .then(() => this.zone.run(() => {}));
   }
 

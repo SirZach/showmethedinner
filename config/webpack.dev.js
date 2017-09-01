@@ -23,7 +23,8 @@ const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 3000;
 const HMR = helpers.hasProcessFlag('hot');
 const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
-  host: HOST,
+  host: '0.0.0.0',
+  disableHostCheck: true,
   port: PORT,
   ENV: ENV,
   HMR: HMR
@@ -221,6 +222,7 @@ module.exports = function (options) {
       port: METADATA.port,
       host: METADATA.host,
       historyApiFallback: true,
+      disableHostCheck: true,
       watchOptions: {
         // if you're using Docker you may need this
         // aggregateTimeout: 300,

@@ -14,6 +14,7 @@
     <div class="content">
       <md-card>
         <md-card-content>
+          <md-progress-bar *ngIf="loadingDinners" mode="indeterminate"></md-progress-bar>            
           <md-table #table [dataSource]="dataSource">
       
             <!--- Note that these columns can be defined in any order.
