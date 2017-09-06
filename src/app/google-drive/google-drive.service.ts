@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
 
+declare global {
+  interface Window { gapi: any; }
+}
+
 export interface Dinner {
   name: string;
   recipe: string;

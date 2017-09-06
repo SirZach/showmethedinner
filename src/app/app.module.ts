@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import {
   NgModule,
@@ -80,7 +80,7 @@ import { CdkTableModule } from '@angular/cdk';
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
-    HttpClientModule,
+    HttpModule,
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     MdAutocompleteModule,
     MdButtonModule,

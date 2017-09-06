@@ -21,17 +21,18 @@
                   The actual rendered columns are set as a property on the row definition" -->
       
             <ng-container cdkColumnDef="name">
-              <md-header-cell *cdkHeaderCellDef> Name </md-header-cell>
+              <md-header-cell *cdkHeaderCellDef>Name</md-header-cell>
               <md-cell *cdkCellDef="let row">
-                <a md-button [attr.href]="row.recipe" target="_blank">
+                <a md-button [attr.href]="row.recipe" target="_blank" *ngIf="row.recipe; else noRecipe">
                   {{row.name}}
                   <md-icon>open_in_new</md-icon>
                 </a>
+                <ng-template #noRecipe>{{row.name}}</ng-template>
               </md-cell>
             </ng-container>
 
             <ng-container cdkColumnDef="category">
-              <md-header-cell *cdkHeaderCellDef style="max-width: 80px;"> Category </md-header-cell>
+              <md-header-cell *cdkHeaderCellDef style="max-width: 80px;">Category</md-header-cell>
               <md-cell *cdkCellDef="let row" style="max-width: 80px;">{{row.category}}</md-cell>
             </ng-container>
       

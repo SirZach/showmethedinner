@@ -23,8 +23,7 @@ const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 3000;
 const HMR = helpers.hasProcessFlag('hot');
 const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
-  host: '0.0.0.0',
-  disableHostCheck: true,
+  host: HOST,
   port: PORT,
   ENV: ENV,
   HMR: HMR

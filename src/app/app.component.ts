@@ -14,16 +14,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
-import { GoogleDriveService } from './google-drive/google-drive.service';
-
-export interface Dinner {
-  name: string;
-  recipe: string;
-  category: string;
-  time: number;
-  servings: number;
-  meals: number;
-}
+import { GoogleDriveService, Dinner } from './google-drive/google-drive.service';
 
 /** An example database that the data source uses to retrieve data for the table. */
 export class ExampleDatabase {
@@ -45,24 +36,31 @@ export class ExampleDatabase {
     return indices;
   }
 
-  constructor() {}
+  randomDinners(dinners: Dinner[]) {
+    const randomIndices = this.getRandomIndices(dinners.length - 1);
+
+    return dinners.filter((dinner, index) => randomIndices.includes(index));
+  }
+
+  addData(dinners: Dinner[]) {
+    this.data = [];
+    dinners.forEach((dinner) => {
+      const copiedData = this.data.slice();
+      copiedData.push(dinner);
+      this.dataChange.next(copiedData);
+    });
+  }
 
   addDinners($googleDrive: GoogleDriveService) {
-    return $googleDrive.getSheet()
-      .then(() => {
-        const dinners = $googleDrive.sheet.rows;
-        const randomIndices = this.getRandomIndices(dinners.length - 1);
+    const rows = $googleDrive.sheet.rows;
+    const promise = rows.length ? Promise.resolve() : $googleDrive.getSheet();
 
-        return dinners.filter((dinner, index) => randomIndices.includes(index));
-      })
-      .then((dinners: Dinner[]) => {
-        this.data = [];
-        dinners.forEach((dinner) => {
-          const copiedData = this.data.slice();
-          copiedData.push(dinner);
-          this.dataChange.next(copiedData);
-        });
-      });
+    return promise.then(() => {
+      const sheetDinners = $googleDrive.sheet.rows.slice();
+      const randomDinners = this.randomDinners(sheetDinners);
+
+      this.addData(randomDinners);
+    })
   }
 }
 
