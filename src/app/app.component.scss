@@ -11,3 +11,9 @@ html, body{
 .fg-1 { flex-grow: 1; }
 .jc-c { justify-content: center; }
 .fd-c { flex-direction: column; }
+
+md-cell {
+  .mat-button {
+    padding-left: 0;
+  }
+}
