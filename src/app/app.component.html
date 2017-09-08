@@ -32,23 +32,32 @@
             </ng-container>
 
             <ng-container cdkColumnDef="category">
-              <md-header-cell *cdkHeaderCellDef style="max-width: 80px;">Category</md-header-cell>
-              <md-cell *cdkCellDef="let row" style="max-width: 80px;">{{row.category}}</md-cell>
+              <md-header-cell *cdkHeaderCellDef>Category</md-header-cell>
+              <md-cell *cdkCellDef="let row">{{row.category}}</md-cell>
             </ng-container>
       
             <ng-container cdkColumnDef="time">
-              <md-header-cell *cdkHeaderCellDef style="max-width: 80px;">Time</md-header-cell>
-              <md-cell *cdkCellDef="let row" style="max-width: 80px;"> {{row.time}} </md-cell>
+              <md-header-cell *cdkHeaderCellDef>Time</md-header-cell>
+              <md-cell *cdkCellDef="let row"> {{row.time}} </md-cell>
             </ng-container>
       
             <ng-container cdkColumnDef="servings">
-              <md-header-cell *cdkHeaderCellDef style="max-width: 80px;">Servings</md-header-cell>
-              <md-cell *cdkCellDef="let row" style="max-width: 80px;"> {{row.servings}} </md-cell>
+              <md-header-cell *cdkHeaderCellDef>Servings</md-header-cell>
+              <md-cell *cdkCellDef="let row"> {{row.servings}} </md-cell>
             </ng-container>
       
             <ng-container cdkColumnDef="meals">
-              <md-header-cell *cdkHeaderCellDef style="max-width: 40px;">Meals</md-header-cell>
-              <md-cell *cdkCellDef="let row" style="max-width: 40px;"> {{row.meals}} </md-cell>
+              <md-header-cell *cdkHeaderCellDef>Meals</md-header-cell>
+              <md-cell *cdkCellDef="let row"> {{row.meals}} </md-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="replace">
+              <md-header-cell *cdkHeaderCellDef>Replace</md-header-cell>
+              <md-cell *cdkCellDef="let row">
+                <button md-button (click)="replaceDinner(row)">
+                  <md-icon>close</md-icon>
+                </button>
+              </md-cell>
             </ng-container>
       
             <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>

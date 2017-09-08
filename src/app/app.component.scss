@@ -12,7 +12,47 @@ html, body{
 .jc-c { justify-content: center; }
 .fd-c { flex-direction: column; }
 
+// Table styles
+md-header-cell {
+  &.mat-column-category {
+    max-width: 80px;
+  }
+  &.mat-column-time {
+    text-align: center;
+    max-width: 40px;
+  }
+  &.mat-column-servings {
+    text-align: center;
+    max-width: 60px;
+  }
+  &.mat-column-meals {
+    text-align: center;
+    max-width: 40px;
+  }
+  &.mat-column-replace {
+    text-align: center;
+    max-width: 90px;
+  }
+}
 md-cell {
+  &.mat-column-category {
+    max-width: 80px;
+  }
+  &.mat-column-time {
+    max-width: 40px;
+    text-align: center;
+  }
+  &.mat-column-servings {
+    max-width: 60px;
+    text-align: center;
+  }
+  &.mat-column-meals {
+    max-width: 40px;
+    text-align: center;
+  }
+  &.mat-column-replace {
+    max-width: 90px;
+  }
   .mat-button {
     padding-left: 0;
   }

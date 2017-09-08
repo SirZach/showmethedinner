@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
     private zone: NgZone
   ) {}
 
-  displayedColumns: string[] = ['name', 'category', 'time', 'servings', 'meals'];
+  displayedColumns: string[] = ['name', 'category', 'time', 'servings', 'meals', 'replace'];
   dinnerDatabase = new DinnerDatabase();
   dataSource: DinnerDataSource | null;
   loadingDinners: boolean = false;
@@ -33,5 +33,10 @@ export class AppComponent implements OnInit {
     this.dinnerDatabase.addDinners(this.$googleDrive)
       .then(() => this.loadingDinners = false)
       .then(() => this.zone.run(() => {}));
+  }
+
+  replaceDinner(dinner: Dinner) {
+    this.dinnerDatabase.replaceDinner(dinner, this.$googleDrive);
+    this.zone.run(() => {});
   }
 }

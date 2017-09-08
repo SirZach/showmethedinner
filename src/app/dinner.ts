@@ -16,10 +16,16 @@ export interface Dinner {
 }
 
 export class DinnerDatabase {
+  randomIndices: number[] = [];
+
   /** Stream that emits whenever the data has been modified. */
   dataChange: BehaviorSubject<Dinner[]> = new BehaviorSubject<Dinner[]>([]);
   get data(): Dinner[] { return this.dataChange.value; }
   set data(dinners) { this.dataChange.next(dinners); }
+
+  _getRandomIndex(max: number): number {
+    return Math.floor(Math.random()*max);
+  }
 
   /**
    * Generate an array of 6 random numbers
@@ -29,7 +35,7 @@ export class DinnerDatabase {
     let indices = [];
 
     while (indices.length < 6) {
-      const randomnumber = Math.ceil(Math.random()*max)
+      const randomnumber = this._getRandomIndex(max);
       
       if (indices.includes(randomnumber)) continue;
       indices.push(randomnumber);
@@ -43,9 +49,9 @@ export class DinnerDatabase {
    * @param dinners list of all dinnners available
    */
   randomDinners(dinners: Dinner[]) {
-    const randomIndices = this.getRandomIndices(dinners.length - 1);
+    this.randomIndices = this.getRandomIndices(dinners.length);
 
-    return dinners.filter((dinner, index) => randomIndices.includes(index));
+    return dinners.filter((dinner, index) => this.randomIndices.includes(index));
   }
 
   /**
@@ -62,6 +68,24 @@ export class DinnerDatabase {
 
       this.dataChange.next(randomDinners);
     })
+  }
+
+  replaceDinner(dinner: Dinner, $googleDrive: GoogleDriveService) {
+    const sheetRows = $googleDrive.sheet.rows;
+    const data = this.data.slice();
+    const dinnerIndex = data.findIndex(d => d.name === dinner.name);
+    const randomDinnerIndices = data.map((d: Dinner) => {
+      return sheetRows.findIndex(sD => sD.name === d.name);
+    });
+
+    let newDinnerIndex;
+    do {
+      newDinnerIndex = this._getRandomIndex(sheetRows.length);
+    } while (randomDinnerIndices.includes(newDinnerIndex))
+
+    data.splice(dinnerIndex, 0, sheetRows[newDinnerIndex]);
+    data.splice(dinnerIndex + 1, 1);
+    this.dataChange.next(data);
   }
 }
 
