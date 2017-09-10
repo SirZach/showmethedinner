@@ -44,7 +44,7 @@ before_script:
 script:
   - npm run ci:travis
 
-after_script:
+after_success:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   - docker build --squash="true" -t sirzach/showmethedinner .
   - docker push sirzach/showmethedinner:latest
