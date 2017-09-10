@@ -43,8 +43,6 @@ before_script:
 
 script:
   - npm run ci:travis
-
-after_success:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   - docker build --squash="true" -t $DOCKER_USERNAME/showmethedinner .
   - docker push $DOCKER_USERNAME/showmethedinner:latest
