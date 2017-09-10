@@ -3,14 +3,15 @@ import {
   inject,
   async,
   TestBed,
-  ComponentFixture
+  ComponentFixture,
 } from '@angular/core/testing';
+import { CdkTableModule } from '@angular/cdk';
+import { GoogleDriveService } from './google-drive/google-drive.service';
 
 /**
  * Load the implementations that should be tested
  */
 import { AppComponent } from './app.component';
-import { AppState } from './app.service';
 
 describe(`App`, () => {
   let comp: AppComponent;
@@ -21,9 +22,10 @@ describe(`App`, () => {
    */
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AppComponent ],
+      declarations: [AppComponent],
       schemas: [NO_ERRORS_SCHEMA],
-      providers: [AppState]
+      imports: [CdkTableModule],
+      providers: [GoogleDriveService]
     })
     /**
      * Compile template and css
@@ -44,17 +46,8 @@ describe(`App`, () => {
     fixture.detectChanges();
   });
 
-  it(`should be readly initialized`, () => {
+  it(`should be initialized`, () => {
     expect(fixture).toBeDefined();
     expect(comp).toBeDefined();
   });
-
-  it('should log ngOnInit', () => {
-    spyOn(console, 'log');
-    expect(console.log).not.toHaveBeenCalled();
-
-    comp.ngOnInit();
-    expect(console.log).toHaveBeenCalled();
-  });
-
 });

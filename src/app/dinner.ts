@@ -16,27 +16,27 @@ export interface Dinner {
 }
 
 export class DinnerDatabase {
-  randomIndices: number[] = [];
+  public randomIndices: number[] = [];
 
   /** Stream that emits whenever the data has been modified. */
-  dataChange: BehaviorSubject<Dinner[]> = new BehaviorSubject<Dinner[]>([]);
+  public dataChange: BehaviorSubject<Dinner[]> = new BehaviorSubject<Dinner[]>([]);
   get data(): Dinner[] { return this.dataChange.value; }
   set data(dinners) { this.dataChange.next(dinners); }
 
-  _getRandomIndex(max: number): number {
-    return Math.floor(Math.random()*max);
+  public getRandomIndex(max: number): number {
+    return Math.floor(Math.random() * max);
   }
 
   /**
    * Generate an array of 6 random numbers
    * @param max maximum number to generate a random index for
    */
-  getRandomIndices(max: number): number[] {
-    let indices = [];
+  public getRandomIndices(max: number): number[] {
+    const indices = [];
 
     while (indices.length < 6) {
-      const randomnumber = this._getRandomIndex(max);
-      
+      const randomnumber = this.getRandomIndex(max);
+
       if (indices.includes(randomnumber)) continue;
       indices.push(randomnumber);
     }
@@ -67,7 +67,7 @@ export class DinnerDatabase {
       const randomDinners = this.randomDinners(sheetDinners);
 
       this.dataChange.next(randomDinners);
-    })
+    });
   }
 
   replaceDinner(dinner: Dinner, $googleDrive: GoogleDriveService) {
@@ -80,8 +80,8 @@ export class DinnerDatabase {
 
     let newDinnerIndex;
     do {
-      newDinnerIndex = this._getRandomIndex(sheetRows.length);
-    } while (randomDinnerIndices.includes(newDinnerIndex))
+      newDinnerIndex = this.getRandomIndex(sheetRows.length);
+    } while (randomDinnerIndices.includes(newDinnerIndex));
 
     data.splice(dinnerIndex, 0, sheetRows[newDinnerIndex]);
     data.splice(dinnerIndex + 1, 1);
@@ -97,13 +97,13 @@ export class DinnerDatabase {
  * should be rendered.
  */
 export class DinnerDataSource extends DataSource<any> {
-  constructor(private _dinnerDatabase: DinnerDatabase) {
+  constructor(private dinnerDatabase: DinnerDatabase) {
     super();
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<Dinner[]> {
-    return this._dinnerDatabase.dataChange.asObservable();
+    return this.dinnerDatabase.dataChange.asObservable();
   }
 
   disconnect() {}

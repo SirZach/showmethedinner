@@ -24,7 +24,7 @@ export class GoogleDriveService {
    * Retreive spreadsheet from Google Drive and map it to a Sheet object
    */
   getSheet() {
-    let sheet = this.sheet;
+    const sheet = this.sheet;
 
     return window.gapi.client.sheets.spreadsheets
       .get({
@@ -41,7 +41,7 @@ export class GoogleDriveService {
             const dinner = {};
             
             for (let i = 0; i < sheet.columns.length; i++) {
-              dinner[sheet.columns[i].toLowerCase()] = r.values[i].formattedValue
+              dinner[sheet.columns[i].toLowerCase()] = r.values[i].formattedValue;
             }
             return dinner as Dinner;
           });

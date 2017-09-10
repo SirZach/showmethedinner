@@ -14,28 +14,27 @@ import { Dinner, DinnerDatabase, DinnerDataSource } from './dinner';
   templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {
+  public displayedColumns: string[] = ['name', 'category', 'time', 'servings', 'meals', 'replace'];
+  public dinnerDatabase = new DinnerDatabase();
+  public dataSource: DinnerDataSource | null;
+  public loadingDinners: boolean = false;
   constructor(
     private $googleDrive: GoogleDriveService,
     private zone: NgZone
   ) {}
 
-  displayedColumns: string[] = ['name', 'category', 'time', 'servings', 'meals', 'replace'];
-  dinnerDatabase = new DinnerDatabase();
-  dataSource: DinnerDataSource | null;
-  loadingDinners: boolean = false;
-
-  ngOnInit() {
+  public ngOnInit() {
     this.dataSource = new DinnerDataSource(this.dinnerDatabase);
   }
 
-  showMeTheDinner() {
+  public showMeTheDinner(): void {
     this.loadingDinners = true;
     this.dinnerDatabase.addDinners(this.$googleDrive)
       .then(() => this.loadingDinners = false)
       .then(() => this.zone.run(() => {}));
   }
 
-  replaceDinner(dinner: Dinner) {
+  public replaceDinner(dinner: Dinner) {
     this.dinnerDatabase.replaceDinner(dinner, this.$googleDrive);
     this.zone.run(() => {});
   }
