@@ -10,6 +10,9 @@ export interface Sheet {
   columns: string[];
 }
 
+/**
+ * Service for interacting with google drive api
+ */
 @Injectable()
 export class GoogleDriveService {
   constructor() {}
