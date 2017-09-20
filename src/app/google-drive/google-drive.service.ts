@@ -32,7 +32,8 @@ export class GoogleDriveService {
     return window.gapi.client.sheets.spreadsheets
       .get({
         spreadsheetId: this.sheetId,
-        includeGridData: true
+        includeGridData: true,
+        ranges: 'A1:F50'
       })
       .then((response: any) => {
         const rows = response.result.sheets[0].data[0].rowData;
@@ -48,6 +49,7 @@ export class GoogleDriveService {
             }
             return dinner as Dinner;
           });
+        return response;
       });
   }
 }

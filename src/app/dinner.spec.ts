@@ -88,7 +88,6 @@ describe('DinnerDatabase', () => {
 
     dinnerDatabase.replaceDinner(dinners[1], $googleDrive);
     dinnerDatabase.dataChange.subscribe((d) => {
-      debugger;
       expect(d[1].name).toBe('dinner6');
       done();
     });
