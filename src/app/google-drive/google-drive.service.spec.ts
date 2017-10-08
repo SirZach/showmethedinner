@@ -26,7 +26,7 @@ describe('GoogleDriveService', () => {
         
         const dinner = service.sheet.rows[0];
         expect(dinner.category).toBe('chicken');
-        expect(dinner.meals).toBe('2');
+        expect(dinner.meals).toBe(2);
         expect(dinner.name).toBe('Buffalo Mac and Cheese');
         expect(dinner.servings).toBe('4');
         expect(dinner.time).toBe('90');

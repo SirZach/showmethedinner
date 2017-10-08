@@ -5,8 +5,10 @@
     <button md-button tabindex="-1" (click)="start.close()">CLOSE</button>
   </md-sidenav>
   <div>
+    <!-- Top Navigation -->
     <md-toolbar color="primary">
       <div class="demo-toolbar">
+        <!-- Show Me The Dinner -->
         <button md-button (click)="showMeTheDinner()">Show Me the Dinner!</button>
       </div>
     </md-toolbar>
@@ -14,7 +16,19 @@
     <div class="content">
       <md-card>
         <md-card-content>
+          <!-- Meals Select -->
+          <md-select placeholder="Meals" [(ngModel)]="dinnerDatabase.mealsCount">
+            <md-option [value]=6>6</md-option>
+            <md-option [value]=5>5</md-option>
+            <md-option [value]=4>4</md-option>
+            <md-option [value]=3>3</md-option>
+            <md-option [value]=2>2</md-option>
+            <md-option [value]=1>1</md-option>
+          </md-select>
+          <!-- Dinners are loading -->
           <md-progress-bar *ngIf="loadingDinners" mode="indeterminate"></md-progress-bar>            
+
+          <!-- Dinners Table -->
           <md-table #table [dataSource]="dataSource">
       
             <!--- Note that these columns can be defined in any order.

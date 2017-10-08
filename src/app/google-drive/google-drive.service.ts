@@ -45,7 +45,14 @@ export class GoogleDriveService {
             const dinner = {};
             
             for (let i = 0; i < sheet.columns.length; i++) {
-              dinner[sheet.columns[i].toLowerCase()] = r.values[i].formattedValue;
+              const val = r.values[i].formattedValue;
+              const column = sheet.columns[i].toLowerCase();
+
+              if (column === 'meals') {
+                dinner[column] = parseInt(val, 10);
+              } else {
+                dinner[column] = val;
+              }
             }
             return dinner as Dinner;
           });

@@ -2,6 +2,7 @@
   "extends": "tslint-config-airbnb",
   "rules": {
     "trailing-comma": [false, {"multiline": "always", "singleline": "never"}],
-    "no-increment-decrement": false
+    "no-increment-decrement": false,
+    "align": false
   }
 }

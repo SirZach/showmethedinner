@@ -10,8 +10,8 @@ export interface Dinner {
   name: string;
   recipe: string;
   category: string;
-  time: number;
-  servings: number;
+  time: string;
+  servings: string;
   meals: number;
 }
 
@@ -19,73 +19,112 @@ export class DinnerDatabase {
   public randomIndices: number[] = [];
 
   /** Stream that emits whenever the data has been modified. */
-  public dataChange: BehaviorSubject<Dinner[]> = new BehaviorSubject<Dinner[]>([]);
+  public dataChange: BehaviorSubject<Dinner[]> = new BehaviorSubject([]);
   get data(): Dinner[] { return this.dataChange.value; }
   set data(dinners) { this.dataChange.next(dinners); }
 
-  public getRandomIndex(max: number): number {
+  $googleDrive: GoogleDriveService;
+
+  /** How many meals for the week */
+  mealsCount: number = 6;
+
+  /** Find a dinner to add */
+  add(): void {
+    const dinners = this.data.slice(0);
+    const sheetDinners = this.$googleDrive.sheet.rows.slice();
+    let randomIndex = this.getRandomIndex(sheetDinners.length);
+
+    while (this.indexInUse(randomIndex) || !this.canAdd(sheetDinners[randomIndex])) {
+      randomIndex = this.getRandomIndex(sheetDinners.length);
+    }
+    dinners.push(sheetDinners[randomIndex]);
+
+    this.dataChange.next(dinners);
+  }
+
+  /**
+   * Is the dinner within the meals requirement
+   * @param dinner Dinner
+   */
+  canAdd(dinner: Dinner): boolean {
+    return this.numberOfMealsLeft() - dinner.meals >= 0;
+  }
+
+  /**
+   * Does the index have a sheet dinner already in the database
+   * @param index number
+   */
+  indexInUse(index: number): boolean {
+    const sheetDinner = this.$googleDrive.sheet.rows[index];
+    
+    return this.data.filter(d => d.name === sheetDinner.name).length > 0;
+  }
+
+  /**
+   * Fill up remaining dinner slots
+   */
+  addToCompletion(): void {
+    if (this.canAddDinner()) {
+      do {
+        this.add();
+      } while (this.canAddDinner());
+    }
+  }
+
+  /**
+   * Remove the dinner from the database
+   * @param dinner Dinner
+   */
+  remove(dinner: Dinner): void {
+    const data = this.data.slice();
+    const index = data.findIndex(d => d.name === dinner.name);
+
+    data.splice(index, 1);
+    this.dataChange.next(data);
+  }
+
+  /**
+   * Replace the dinner with 1 or more depending on meals requirements
+   * @param dinner Dinner
+   */
+  replaceDinner(dinner: Dinner) {
+    this.remove(dinner);
+    this.addToCompletion();
+  }
+
+  /**
+   * How many meals left
+   */
+  numberOfMealsLeft(): number {
+    return this.mealsCount - this.data.reduce((prev, dinner) => {
+      prev += dinner.meals;
+      return prev;
+    }, 0);
+  }
+
+  /**
+   * Has the meal requirement been met
+   */
+  canAddDinner(): boolean {
+    return this.numberOfMealsLeft() > 0;
+  }
+
+  /**
+   * Create a random number
+   * @param max max number to create a random number up to
+   */
+  getRandomIndex(max: number): number {
     return Math.floor(Math.random() * max);
   }
 
   /**
-   * Generate an array of 6 random numbers
-   * @param max maximum number to generate a random index for
-   */
-  public getRandomIndices(max: number): number[] {
-    const indices = [];
-
-    while (indices.length < 6) {
-      const randomnumber = this.getRandomIndex(max);
-
-      if (indices.includes(randomnumber)) continue;
-      indices.push(randomnumber);
-    }
-
-    return indices;
-  }
-
-  /**
-   * Generate 6 random dinners
-   * @param dinners list of all dinnners available
-   */
-  randomDinners(dinners: Dinner[]) {
-    this.randomIndices = this.getRandomIndices(dinners.length);
-
-    return dinners.filter((dinner, index) => this.randomIndices.includes(index));
-  }
-
-  /**
    * Main driver for populating the table with random dinners
-   * @param $googleDrive google drive service to retrieve spreadsheet
    */
-  addDinners($googleDrive: GoogleDriveService) {
-    const rows = $googleDrive.sheet.rows;
-    const promise = rows.length ? Promise.resolve() : $googleDrive.getSheet();
+  initDinners() {
+    const rows = this.$googleDrive.sheet.rows;
+    const promise = rows.length ? Promise.resolve() : this.$googleDrive.getSheet();
 
-    return promise.then(() => {
-      const sheetDinners = $googleDrive.sheet.rows.slice();
-      const randomDinners = this.randomDinners(sheetDinners);
-
-      this.dataChange.next(randomDinners);
-    });
-  }
-
-  replaceDinner(dinner: Dinner, $googleDrive: GoogleDriveService) {
-    const sheetRows = $googleDrive.sheet.rows;
-    const data = this.data.slice();
-    const dinnerIndex = data.findIndex(d => d.name === dinner.name);
-    const randomDinnerIndices = data.map((d: Dinner) => {
-      return sheetRows.findIndex(sD => sD.name === d.name);
-    });
-
-    let newDinnerIndex;
-    do {
-      newDinnerIndex = this.getRandomIndex(sheetRows.length);
-    } while (randomDinnerIndices.includes(newDinnerIndex));
-
-    data.splice(dinnerIndex, 0, sheetRows[newDinnerIndex]);
-    data.splice(dinnerIndex + 1, 1);
-    this.dataChange.next(data);
+    return promise.then(() => this.addToCompletion());
   }
 }
 
@@ -97,8 +136,12 @@ export class DinnerDatabase {
  * should be rendered.
  */
 export class DinnerDataSource extends DataSource<any> {
-  constructor(private dinnerDatabase: DinnerDatabase) {
+  constructor(
+    private dinnerDatabase: DinnerDatabase,
+    private $googleDrive: GoogleDriveService
+  ) {
     super();
+    this.dinnerDatabase.$googleDrive = $googleDrive;
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
