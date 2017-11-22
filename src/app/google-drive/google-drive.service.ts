@@ -23,6 +23,9 @@ export class GoogleDriveService {
     columns: []
   };
 
+  /** Are sheet rows populated from local storage or from google sheets? */
+  loadedFromCache: boolean = false;
+
   /**
    * Retreive spreadsheet from Google Drive and map it to a Sheet object
    */

@@ -69,6 +69,7 @@ export class DinnerDatabase {
         this.add();
       } while (this.canAddDinner());
     }
+    this.saveDinnersToLocalStorage(this.data.slice(0));
   }
 
   /**
@@ -96,7 +97,11 @@ export class DinnerDatabase {
    * How many meals left
    */
   numberOfMealsLeft(): number {
-    return this.mealsCount - this.data.reduce((prev, dinner) => {
+    return this.mealsCount - this.numberOfMeals(this.data);
+  }
+
+  numberOfMeals(dinners: Dinner[]): number {
+    return dinners.reduce((prev, dinner) => {
       prev += dinner.meals;
       return prev;
     }, 0);
@@ -121,10 +126,49 @@ export class DinnerDatabase {
    * Main driver for populating the table with random dinners
    */
   initDinners() {
+    if (this.$googleDrive.loadedFromCache) {
+      this.clearDinners();
+    }
     const rows = this.$googleDrive.sheet.rows;
     const promise = rows.length ? Promise.resolve() : this.$googleDrive.getSheet();
 
-    return promise.then(() => this.addToCompletion());
+    return promise.then(() => {
+      this.addToCompletion();
+      this.$googleDrive.loadedFromCache = false;
+    });
+  }
+
+  /**
+   * Clear out all referenes to dinners to start anew
+   */
+  clearDinners() {
+    this.$googleDrive.sheet.rows = [];
+    this.data = [];
+    localStorage.setItem('dinners', null);
+  }
+
+  /**
+   * On page load, show dinners that were found from last time
+   */
+  loadDinnersFromLocalStorage(): void {
+    const cachedDinners = localStorage.getItem('dinners');
+
+    if (cachedDinners) {
+      const dinners = JSON.parse(cachedDinners) as Dinner[];
+
+      this.mealsCount = this.numberOfMeals(dinners);
+      this.$googleDrive.sheet.rows = dinners;
+      this.$googleDrive.loadedFromCache = true;
+      this.addToCompletion();
+    }
+  }
+
+  /**
+   * Save dinners to local storage for the next page load
+   * @param dinners Dinners
+   */
+  saveDinnersToLocalStorage(dinners: Dinner[]): void {
+    localStorage.setItem('dinners', JSON.stringify(dinners));
   }
 }
 

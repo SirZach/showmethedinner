@@ -26,6 +26,7 @@ export class AppComponent implements OnInit {
 
   public ngOnInit() {
     this.dataSource = new DinnerDataSource(this.dinnerDatabase, this.$googleDrive);
+    this.dinnerDatabase.loadDinnersFromLocalStorage();
   }
 
   public showMeTheDinner(): void {
