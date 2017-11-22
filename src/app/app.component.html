@@ -10,6 +10,8 @@
       <div class="demo-toolbar">
         <!-- Show Me The Dinner -->
         <button md-button (click)="showMeTheDinner()">Show Me the Dinner!</button>
+        <button *ngIf="loggedIn" md-button (click)="logOut()">Log Out</button>
+        <button *ngIf="!loggedIn" md-button (click)="logIn()">Log In</button>
       </div>
     </md-toolbar>
   
