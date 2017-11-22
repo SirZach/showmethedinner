@@ -36,7 +36,7 @@ export class GoogleDriveService {
       .get({
         spreadsheetId: this.sheetId,
         includeGridData: true,
-        ranges: 'A1:F50'
+        ranges: 'A1:G50'
       })
       .then((response: any) => {
         const rows = response.result.sheets[0].data[0].rowData;

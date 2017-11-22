@@ -14,71 +14,50 @@
     </md-toolbar>
   
     <div class="content">
-      <md-card>
+      <md-card class="mb-16"> 
         <md-card-content>
-          <!-- Meals Select -->
-          <md-select placeholder="Meals" [(ngModel)]="dinnerDatabase.mealsCount">
-            <md-option [value]=6>6</md-option>
-            <md-option [value]=5>5</md-option>
-            <md-option [value]=4>4</md-option>
-            <md-option [value]=3>3</md-option>
-            <md-option [value]=2>2</md-option>
-            <md-option [value]=1>1</md-option>
+          <!-- Meals Select --> 
+          <md-select placeholder="Meals" [(ngModel)]="dinnerDatabase.mealsCount"> 
+            <md-option [value]=6>6</md-option> 
+            <md-option [value]=5>5</md-option> 
+            <md-option [value]=4>4</md-option> 
+            <md-option [value]=3>3</md-option> 
+            <md-option [value]=2>2</md-option> 
+            <md-option [value]=1>1</md-option> 
           </md-select>
-          <!-- Dinners are loading -->
-          <md-progress-bar *ngIf="loadingDinners" mode="indeterminate"></md-progress-bar>            
 
-          <!-- Dinners Table -->
-          <md-table #table [dataSource]="dataSource">
-      
-            <!--- Note that these columns can be defined in any order.
-                  The actual rendered columns are set as a property on the row definition" -->
-      
-            <ng-container cdkColumnDef="name">
-              <md-header-cell *cdkHeaderCellDef>Name</md-header-cell>
-              <md-cell *cdkCellDef="let row">
-                <a md-button [attr.href]="row.recipe" target="_blank" *ngIf="row.recipe; else noRecipe">
-                  {{row.name}}
-                  <md-icon>open_in_new</md-icon>
-                </a>
-                <ng-template #noRecipe>{{row.name}}</ng-template>
-              </md-cell>
-            </ng-container>
-
-            <ng-container cdkColumnDef="category">
-              <md-header-cell *cdkHeaderCellDef>Category</md-header-cell>
-              <md-cell *cdkCellDef="let row">{{row.category}}</md-cell>
-            </ng-container>
-      
-            <ng-container cdkColumnDef="time">
-              <md-header-cell *cdkHeaderCellDef>Time</md-header-cell>
-              <md-cell *cdkCellDef="let row"> {{row.time}} </md-cell>
-            </ng-container>
-      
-            <ng-container cdkColumnDef="servings">
-              <md-header-cell *cdkHeaderCellDef>Servings</md-header-cell>
-              <md-cell *cdkCellDef="let row"> {{row.servings}} </md-cell>
-            </ng-container>
-      
-            <ng-container cdkColumnDef="meals">
-              <md-header-cell *cdkHeaderCellDef>Meals</md-header-cell>
-              <md-cell *cdkCellDef="let row"> {{row.meals}} </md-cell>
-            </ng-container>
-
-            <ng-container cdkColumnDef="replace">
-              <md-header-cell *cdkHeaderCellDef>Replace</md-header-cell>
-              <md-cell *cdkCellDef="let row">
-                <button md-button (click)="replaceDinner(row)">
-                  <md-icon>close</md-icon>
-                </button>
-              </md-cell>
-            </ng-container>
-      
-            <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
-            <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
-          </md-table>
+          <!-- Dinners are loading --> 
+          <md-progress-bar *ngIf="loadingDinners" mode="indeterminate"></md-progress-bar>
         </md-card-content>
       </md-card>
+
+      <div class="card-wrapper">
+        <md-card *ngFor="let dinner of dinnerDatabase.data">
+          <md-card-header>
+            <md-card-title>{{dinner.name}}</md-card-title>
+          </md-card-header>
+          <img *ngIf="dinner.image" md-card-image [src]="dinner.image">
+          <div class="fg-1"></div>
+          <md-card-content>
+            <ul>
+              <li>Category: {{dinner.category}}</li>
+              <li>Time: {{dinner.time}}</li>
+              <li>Servings: {{dinner.servings}}</li>
+              <li>Meals: {{dinner.meals}}</li>
+            </ul>
+          </md-card-content>
+          <md-card-actions>
+            <a md-button [attr.href]="dinner.recipe" target="_blank" *ngIf="dinner.recipe; else noRecipe">
+              Recipe
+              <md-icon>open_in_new</md-icon>
+            </a>
+            <button md-button (click)="replaceDinner(dinner)">
+              Replace
+              <md-icon>close</md-icon>
+            </button>
+          </md-card-actions>
+        </md-card>
+      </div>
     </div>
   </div>
 </md-sidenav-container>

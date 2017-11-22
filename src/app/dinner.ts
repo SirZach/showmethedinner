@@ -13,6 +13,7 @@ export interface Dinner {
   time: string;
   servings: string;
   meals: number;
+  image: string;
 }
 
 export class DinnerDatabase {
@@ -144,7 +145,7 @@ export class DinnerDatabase {
   clearDinners() {
     this.$googleDrive.sheet.rows = [];
     this.data = [];
-    localStorage.setItem('dinners', null);
+    localStorage.setItem('dinners', '');
   }
 
   /**
