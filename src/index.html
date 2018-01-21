@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">    
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -28,11 +29,31 @@
     ga('send', 'pageview');
   </script>
   <script async src="https://www.google-analytics.com/analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase-firestore.js"></script>
+
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyCZ7Ci8X2zT5Jh5vvlzyOa6Bl2enOFoRUo",
+      authDomain: "enduring-victor-175321.firebaseapp.com",
+      databaseURL: "https://enduring-victor-175321.firebaseio.com",
+      projectId: "enduring-victor-175321",
+      storageBucket: "",
+      messagingSenderId: "203358340372"
+    };
+    // firebase.initializeApp(config);
+    firebase.initializeApp({
+      apiKey: "AIzaSyCZ7Ci8X2zT5Jh5vvlzyOa6Bl2enOFoRUo",
+      authDomain: "enduring-victor-175321.firebaseapp.com",
+      projectId: "enduring-victor-175321"
+    });
+  </script>
   <!-- End Google Analytics -->
 
   <!-- CSS will be injected by webpack here -->
   <!-- Preload link tags will be injected by webpack here -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 </head>
 
 <body>
@@ -40,8 +61,6 @@
   <app>
     Loading...
   </app>
-  <script async defer src="https://apis.google.com/js/api.js">
-  </script>
 
   <!-- Scripts will be injected by webpack here -->
 </body>

@@ -1,0 +1,30 @@
+<mat-card class="mb-16">
+  <mat-card-title>Meals</mat-card-title>
+  <mat-card-content>
+    <!-- Meals Select --> 
+    <mat-select placeholder="Meals" [(ngModel)]="$auth.user.mealsCount" (selectionChange)="$user.saveUser($auth.user)"> 
+      <mat-option [value]=6>6</mat-option> 
+      <mat-option [value]=5>5</mat-option> 
+      <mat-option [value]=4>4</mat-option> 
+      <mat-option [value]=3>3</mat-option> 
+      <mat-option [value]=2>2</mat-option> 
+      <mat-option [value]=1>1</mat-option> 
+    </mat-select>
+
+    <!-- Dinners are loading --> 
+    <mat-progress-bar *ngIf="loadingDinners" mode="indeterminate"></mat-progress-bar>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="$randomDinner.generateRandomDinners()">
+      Generate Random Dinners
+    </button>
+  </mat-card-actions>
+</mat-card>
+
+<div class="card-wrapper">
+  <dinner *ngFor="let dinner of $randomDinner.dinners"
+    [dinner]="dinner"
+    [canEdit]=false
+    (onReplace)="$randomDinner.replaceDinner($event)"
+  ></dinner>
+</div>

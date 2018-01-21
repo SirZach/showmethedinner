@@ -1,0 +1,14 @@
+.bottom-right-fab {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+}
+
+dinner {
+  flex-grow: 1;
+  margin-bottom: 16px;
+  width: 100%;
+  mat-form-field {
+    width: 100%;
+  }
+}

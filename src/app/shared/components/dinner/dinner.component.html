@@ -1,0 +1,53 @@
+<mat-card>
+  <mat-card-header *ngIf="!isEditing">
+    <mat-card-title>{{dinner.name}}</mat-card-title>
+  </mat-card-header>
+  <img *ngIf="dinner.image" mat-card-image [src]="dinner.image">
+  <div class="fg-1"></div>
+  <mat-card-content>
+    <!-- NOT EDITING -->
+    <ul *ngIf="!isEditing">
+      <li>Meals: {{dinner.meals}}</li>
+    </ul>
+
+    <!-- EDITING -->
+    <ng-container *ngIf="isEditing">
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Name" [(ngModel)]="dinner.name" [formControl]="dinnerName" required>
+        <mat-error *ngIf="dinnerName.invalid">Name required</mat-error>
+      </mat-form-field>
+      <mat-form-field class="w-100">
+        <mat-select placeholder="Meals" [(ngModel)]="dinner.meals" [formControl]="dinnerMeals" required> 
+          <mat-option>--</mat-option>
+          <mat-option [value]=6>6</mat-option> 
+          <mat-option [value]=5>5</mat-option> 
+          <mat-option [value]=4>4</mat-option> 
+          <mat-option [value]=3>3</mat-option> 
+          <mat-option [value]=2>2</mat-option> 
+          <mat-option [value]=1>1</mat-option> 
+        </mat-select>
+        <mat-error *ngIf="dinnerMeals.hasError('required')">Meals required</mat-error>
+      </mat-form-field>
+    </ng-container>
+  </mat-card-content>
+  <mat-card-actions>
+    <a mat-button [attr.href]="dinner.recipe" target="_blank" *ngIf="dinner.recipe; else noRecipe">
+      Recipe
+      <mat-icon>open_in_new</mat-icon>
+    </a>
+    <button *ngIf="!canEdit" mat-button color="accent" (click)="replace(dinner)">
+      Replace
+      <mat-icon>close</mat-icon>
+    </button>
+    <button *ngIf="canEdit && !isEditing" mat-button (click)="edit(dinner)">
+      Edit
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button *ngIf="isEditing" mat-button (click)="cancel(dinner)">
+      Cancel
+    </button>
+    <button *ngIf="isEditing" mat-button color="primary" (click)="save(dinner)">
+      Save
+    </button>
+  </mat-card-actions>
+</mat-card>
