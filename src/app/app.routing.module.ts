@@ -21,4 +21,9 @@ const routes: Routes = [
   }
 ];
 
-export const APP_ROUTING: ModuleWithProviders = RouterModule.forRoot(routes);
+export const APP_ROUTING: ModuleWithProviders = RouterModule.forRoot(
+  routes,
+  {
+    useHash: true
+  }
+);

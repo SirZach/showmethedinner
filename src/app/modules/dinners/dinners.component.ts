@@ -24,8 +24,8 @@ export class DinnersComponent implements OnInit {
     private zone: NgZone,
     private route: ActivatedRoute,
     private router: Router,
-    private $auth: AuthService,
-    private $food: FoodService
+    public $auth: AuthService,
+    public $food: FoodService
   ) {}
 
   public ngOnInit() {

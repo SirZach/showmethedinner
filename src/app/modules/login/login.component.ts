@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
 
   private goToDinners(user: User) {
     this.zone.run(() => { // HAX!!!!!!
-      this.router.navigate(['dinners', user.uid])
+      this.router.navigate(['dinners', user.uid]);
     });
   }
 }

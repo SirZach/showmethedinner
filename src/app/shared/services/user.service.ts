@@ -80,7 +80,7 @@ export class UserService {
         return this.saveUser(user);
       })
       .catch((e) => {
-        //TODO add error handling
+        // TODO add error handling
       });
   }
 

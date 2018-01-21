@@ -26,10 +26,10 @@ export class RandomComponent implements OnInit {
     private zone: NgZone,
     private route: ActivatedRoute,
     private router: Router,
-    private $auth: AuthService,
-    private $food: FoodService,
-    private $randomDinner: RandomDinnerService,
-    private $user: UserService
+    public $auth: AuthService,
+    public $food: FoodService,
+    public $randomDinner: RandomDinnerService,
+    public $user: UserService
   ) {}
 
   public ngOnInit() {

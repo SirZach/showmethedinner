@@ -23,7 +23,7 @@ import '../styles/styles.scss';
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
 @NgModule({
-  bootstrap: [ AppComponent ],
+  bootstrap: [AppComponent],
   declarations: [
     AppComponent
   ],
@@ -45,7 +45,7 @@ import '../styles/styles.scss';
      * When the module is not imported it will get tree shaked.
      * This is a simple example, a big app should probably implement some logic
      */
-    ...environment.showDevModule ? [ ] : [],
+    ...environment.showDevModule ? [] : [],
   ],
   entryComponents: [
   ],

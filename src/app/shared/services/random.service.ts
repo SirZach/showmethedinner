@@ -105,8 +105,7 @@ export class RandomDinnerService {
 
   numberOfMeals(dinners: Dinner[]): number {
     return dinners.reduce((prev, dinner) => {
-      prev += dinner.meals;
-      return prev;
+      return prev + dinner.meals;
     }, 0);
   }
 
