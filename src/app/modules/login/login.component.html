@@ -1,0 +1,8 @@
+<mat-card *ngIf="!loadingUser">
+  <mat-card-title>Sign in with Google</mat-card-title>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="login()">Log In</button>
+  </mat-card-actions>
+</mat-card>
+
+<centered-loading *ngIf="loadingUser"></centered-loading>

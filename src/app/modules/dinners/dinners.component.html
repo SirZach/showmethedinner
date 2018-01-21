@@ -1,0 +1,25 @@
+<div *ngIf="$food.dinners.length" class="card-wrapper">
+  <dinner
+    *ngFor="let dinner of $food.dinners"
+    [dinner]="dinner"
+    [canEdit]=true
+    (onCancel)="revertDinner($event)"
+    ></dinner>
+</div>
+
+<mat-card *ngIf="!$food.dinners.length && !loadingDinners">
+  <mat-card-header>
+    <mat-card-title>No dinners found!</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <button (click)="addDinner()" mat-raised-button color="primary">
+      Add Your First Dinner
+    </button>
+  </mat-card-content>
+</mat-card>
+
+<centered-loading *ngIf="loadingDinners"></centered-loading>
+
+<button (click)="addDinner()" mat-fab color="primary" class="bottom-right-fab">
+  <mat-icon aria-label="Add new dinner">add</mat-icon>
+</button>

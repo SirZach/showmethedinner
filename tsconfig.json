@@ -1,6 +1,7 @@
+
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
@@ -13,11 +14,9 @@
     "strictNullChecks": false,
     "lib": [
       "dom",
-      "es6",
-      "es7",
-      "es2016"
+      "es6"
     ],
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
       "@angular/*": ["node_modules/@angular/*"]
     },

@@ -1,65 +1,27 @@
-<md-sidenav-container class="demo-root" fullscreen>
-  <md-sidenav #start>
-    <md-nav-list>
-    </md-nav-list>
-    <button md-button tabindex="-1" (click)="start.close()">CLOSE</button>
-  </md-sidenav>
-  <div>
+<mat-sidenav-container fullscreen>
+  <mat-sidenav
+    #snav
+    [mode]="mobileQuery.matches ? 'over' : 'side'"
+    [fixedInViewport]="mobileQuery.matches">
+    <mat-nav-list>
+      <div *ngIf="mobileQuery.matches" style="min-width: 50vw;"></div>
+      <a *ngIf="$auth.user" mat-list-item routerLink="/random/{{$auth.user.uid}}" routerLinkActive="active" (click)="snav.close()">Get Dinners</a>
+      <a *ngIf="$auth.user" mat-list-item routerLink="/dinners/{{$auth.user.uid}}" routerLinkActive="active" (click)="snav.close()">All Dinners</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
     <!-- Top Navigation -->
-    <md-toolbar color="primary">
-      <div class="demo-toolbar">
-        <!-- Show Me The Dinner -->
-        <button md-button (click)="showMeTheDinner()">Show Me the Dinner!</button>
-        <button *ngIf="loggedIn" md-button (click)="logOut()">Log Out</button>
-        <button *ngIf="!loggedIn" md-button (click)="logIn()">Log In</button>
-      </div>
-    </md-toolbar>
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
+
+      <!-- Show Me The Dinner -->
+      <span>Show Me the Dinner!</span>
+      <div style="flex: 1 1 auto; min-width: 16px;"></div>
+      <span class="cur-p truncate" *ngIf="$auth.loggedIn" (click)="logout()">{{$auth.user.displayName}}</span>
+    </mat-toolbar>
   
     <div class="content">
-      <md-card class="mb-16"> 
-        <md-card-content>
-          <!-- Meals Select --> 
-          <md-select placeholder="Meals" [(ngModel)]="dinnerDatabase.mealsCount"> 
-            <md-option [value]=6>6</md-option> 
-            <md-option [value]=5>5</md-option> 
-            <md-option [value]=4>4</md-option> 
-            <md-option [value]=3>3</md-option> 
-            <md-option [value]=2>2</md-option> 
-            <md-option [value]=1>1</md-option> 
-          </md-select>
-
-          <!-- Dinners are loading --> 
-          <md-progress-bar *ngIf="loadingDinners" mode="indeterminate"></md-progress-bar>
-        </md-card-content>
-      </md-card>
-
-      <div class="card-wrapper">
-        <md-card *ngFor="let dinner of dinnerDatabase.data">
-          <md-card-header>
-            <md-card-title>{{dinner.name}}</md-card-title>
-          </md-card-header>
-          <img *ngIf="dinner.image" md-card-image [src]="dinner.image">
-          <div class="fg-1"></div>
-          <md-card-content>
-            <ul>
-              <li>Category: {{dinner.category}}</li>
-              <li>Time: {{dinner.time}}</li>
-              <li>Servings: {{dinner.servings}}</li>
-              <li>Meals: {{dinner.meals}}</li>
-            </ul>
-          </md-card-content>
-          <md-card-actions>
-            <a md-button [attr.href]="dinner.recipe" target="_blank" *ngIf="dinner.recipe; else noRecipe">
-              Recipe
-              <md-icon>open_in_new</md-icon>
-            </a>
-            <button md-button (click)="replaceDinner(dinner)">
-              Replace
-              <md-icon>close</md-icon>
-            </button>
-          </md-card-actions>
-        </md-card>
-      </div>
+      <router-outlet></router-outlet>
     </div>
-  </div>
-</md-sidenav-container>
+  </mat-sidenav-content>
+</mat-sidenav-container>
