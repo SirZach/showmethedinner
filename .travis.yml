@@ -55,4 +55,4 @@ deploy:
   acl: public_read
   on:
     branch: master
-    repo: sirzach/showmethedinner
+    repo: SirZach/showmethedinner
