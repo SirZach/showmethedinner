@@ -17,7 +17,7 @@ addons:
       - google-chrome-stable
 
 node_js:
-  - "6"
+  - '8'
 
 matrix:
   fast_finish: true
@@ -43,3 +43,16 @@ before_script:
 
 script:
   - npm run ci:travis
+
+deploy:
+  skip_cleanup: true
+  provider: s3
+  access_key_id: AKIAJVEFIQJKKCFGYZPQ
+  secret_access_key:
+    secure: "$AWS_SECRET"
+  bucket: showmethedinner.com
+  local-dir: dist
+  acl: public_read
+  on:
+    branch: master
+    repo: sirzach/showmethedinner
