@@ -3,7 +3,9 @@ export class Firebase {
 
   toJSON(): any {
     return Object.keys(this).reduce((prev, curr) => {
-      prev[curr] = this[curr];
+      if (this[curr] !== undefined) {
+        prev[curr] = this[curr];
+      }
 
       return prev;
     }, {});
