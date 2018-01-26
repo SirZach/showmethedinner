@@ -33,6 +33,7 @@ export class DinnerComponent implements OnInit {
   cachedDinnerData: any;
   dinnerName = new FormControl('', [Validators.required]);
   dinnerMeals = new FormControl('', [Validators.required]);
+  dinnerRecipe = new FormControl('', [Validators.pattern('https?://.+')]);
 
   constructor(
     private $food: FoodService,
@@ -82,6 +83,7 @@ export class DinnerComponent implements OnInit {
 
   isDinnerValid(): boolean {
     return this.dinnerName.valid &&
-      this.dinnerMeals.valid;
+      this.dinnerMeals.valid &&
+      this.dinnerRecipe.valid;
   }
 }

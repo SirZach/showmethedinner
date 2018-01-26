@@ -17,6 +17,10 @@
         <mat-error *ngIf="dinnerName.invalid">Name required</mat-error>
       </mat-form-field>
       <mat-form-field class="w-100">
+        <input matInput placeholder="Recipe" [(ngModel)]="dinner.recipe" [formControl]="dinnerRecipe">
+        <mat-error *ngIf="dinnerRecipe.invalid">Must be a url</mat-error>
+      </mat-form-field>
+      <mat-form-field class="w-100">
         <mat-select placeholder="Meals" [(ngModel)]="dinner.meals" [formControl]="dinnerMeals" required> 
           <mat-option>--</mat-option>
           <mat-option [value]=6>6</mat-option> 
@@ -31,7 +35,7 @@
     </ng-container>
   </mat-card-content>
   <mat-card-actions>
-    <a mat-button [attr.href]="dinner.recipe" target="_blank" *ngIf="dinner.recipe">
+    <a mat-button [attr.href]="dinner.recipe" target="_blank" *ngIf="dinner.recipe && !isEditing">
       Recipe
       <mat-icon>open_in_new</mat-icon>
     </a>
