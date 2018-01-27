@@ -21,6 +21,10 @@
         <mat-error *ngIf="dinnerRecipe.invalid">Must be a url</mat-error>
       </mat-form-field>
       <mat-form-field class="w-100">
+        <input matInput placeholder="Image" [(ngModel)]="dinner.image" [formControl]="dinnerImage">
+        <mat-error *ngIf="dinnerImage.invalid">Must be a url</mat-error>
+      </mat-form-field>
+      <mat-form-field class="w-100">
         <mat-select placeholder="Meals" [(ngModel)]="dinner.meals" [formControl]="dinnerMeals" required> 
           <mat-option>--</mat-option>
           <mat-option [value]=6>6</mat-option> 
