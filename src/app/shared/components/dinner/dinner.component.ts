@@ -28,6 +28,7 @@ export class DinnerComponent implements OnInit {
   @Output() onSave = new EventEmitter<Dinner>();
   @Output() onCancel = new EventEmitter<Dinner>();
   @Output() onReplace = new EventEmitter<Dinner>();
+  @Output() onDelete = new EventEmitter<Dinner>();
 
   isEditing: boolean = false;
   cachedDinnerData: any;
@@ -69,6 +70,18 @@ export class DinnerComponent implements OnInit {
           this.onSave.emit(dinner);
         });
     }
+  }
+
+  /**
+   * Remove dinner from server and UI
+   * @param dinner Dinner
+   */
+  delete(dinner: Dinner) {
+    this.$food.deleteDinner(dinner)
+      .then(() => {
+        this.snackbar.open('Dinner deleted', 'Got It', { duration: 2000 });
+        this.onDelete.emit(dinner);
+      });
   }
 
   cancel(dinner: Dinner) {
