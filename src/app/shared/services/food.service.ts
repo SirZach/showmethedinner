@@ -64,6 +64,23 @@ export class FoodService {
   }
 
   /**
+   * Delete dinner in database and in local cache
+   * @param dinner Dinner
+   */
+  deleteDinner(dinner: Dinner): Promise<any> {
+    return firebase
+      .firestore()
+      .collection('dinners')
+      .doc(dinner.id)
+      .delete()
+      .then(() => {
+        const foundIndex = this.dinners.findIndex(d => d.id === dinner.id);
+
+        this.dinners.splice(foundIndex, 1);
+      });
+  }
+
+  /**
    * Return the number of meals in all dinners
    */
   numberOfMeals(): number {

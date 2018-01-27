@@ -53,5 +53,6 @@
     <button *ngIf="isEditing" mat-button color="primary" (click)="save(dinner)">
       Save
     </button>
+    <button *ngIf="canEdit && !isEditing" mat-button color="warn" (click)="delete(dinner)">Delete</button>
   </mat-card-actions>
 </mat-card>
