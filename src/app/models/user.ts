@@ -5,7 +5,7 @@ export class User extends Firebase {
   email: string;
   photoURL: string;
   uid: string;
-  mealsCount: number = 6;
+  mealsCount: number;
 
   constructor(fields: Partial<User>) {
     super();
@@ -15,5 +15,6 @@ export class User extends Firebase {
     this.photoURL = fields.photoURL;
     this.uid = fields.uid;
     this.mealsCount = fields.mealsCount || 6;
+    this.id = fields.id;
   }
 }

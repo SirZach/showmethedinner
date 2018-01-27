@@ -2,7 +2,7 @@
   <mat-card-title>Meals</mat-card-title>
   <mat-card-content>
     <!-- Meals Select --> 
-    <mat-select placeholder="Meals" [(ngModel)]="$auth.user.mealsCount" (selectionChange)="$user.saveUser($auth.user)"> 
+    <mat-select placeholder="Meals" [(ngModel)]="$auth.user.mealsCount" (selectionChange)="mealsCountSelectionChanged()"> 
       <mat-option [value]=6>6</mat-option> 
       <mat-option [value]=5>5</mat-option> 
       <mat-option [value]=4>4</mat-option> 
@@ -15,16 +15,26 @@
     <mat-progress-bar *ngIf="loadingDinners" mode="indeterminate"></mat-progress-bar>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="$randomDinner.generateRandomDinners()">
+    <button mat-raised-button color="primary" (click)="generateRandomDinners()">
       Generate Random Dinners
     </button>
   </mat-card-actions>
 </mat-card>
 
-<div class="card-wrapper">
+<div class="card-wrapper" *ngIf="!loadingDinners && enoughMeals">
   <dinner *ngFor="let dinner of $randomDinner.dinners"
     [dinner]="dinner"
     [canEdit]=false
     (onReplace)="$randomDinner.replaceDinner($event)"
   ></dinner>
+</div>
+
+<div *ngIf="!enoughMeals">
+  <h1>Not enough meals</h1>
+  <a mat-raised-button routerLink="/dinners/{{$auth.user.uid}}">Add More Dinners</a>
+</div>
+
+<div *ngIf="!canSequence">
+  <h1>No dinners add up to {{$auth.user.mealsCount}} meals</h1>
+  <a mat-raised-button routerLink="/dinners/{{$auth.user.uid}}">Add More Dinners</a>
 </div>

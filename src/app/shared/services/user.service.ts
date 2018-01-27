@@ -59,10 +59,13 @@ export class UserService {
 
   /**
    * Retrieve user from the database by id
-   * @param id User uid
+   * @param uid User uid
    */
-  getUser(id: string): Promise<User> {
-    return Promise.resolve(new User({}));
+  getUser(uid: string): Promise<User> {
+    return this.getUsers()
+      .then((users) => {
+        return users.find(u => u.uid === uid);
+      });
   }
 
   /**
@@ -89,9 +92,21 @@ export class UserService {
    * @param user User
    */
   saveUser(user: User): Promise<User> {
-    return firebase
-      .firestore()
-      .doc(`users/${user.id}`)
-      .update(user.toJSON());
+    if (!user.id) {
+      this.getUser(user.uid)
+        .then((u) => {
+          const userToSave = Object.assign({}, u.toJSON(), user.toJSON());
+          
+          return firebase
+            .firestore()
+            .doc(`users/${u.id}`)
+            .update(userToSave);
+        });
+    } else {
+      return firebase
+        .firestore()
+        .doc(`users/${user.id}`)
+        .update(user.toJSON());
+    }
   }
 }
