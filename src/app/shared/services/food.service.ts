@@ -11,13 +11,9 @@ import {
 export class FoodService {
   dinners: Dinner[] = [];
 
-  constructor(
-    private zone: NgZone
-  ) {}
+  constructor(private zone: NgZone) {}
 
-  init() {
-
-  }
+  init() {}
 
   setDinners(dinners: Dinner[]) {
     this.dinners = dinners;
@@ -65,5 +61,14 @@ export class FoodService {
         dinner.id = d.id;
         return this.saveDinner(dinner);
       });
+  }
+
+  /**
+   * Return the number of meals in all dinners
+   */
+  numberOfMeals(): number {
+    return this.dinners.reduce((prev, dinner) => {
+      return prev + dinner.meals;
+    }, 0);
   }
 }

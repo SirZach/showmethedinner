@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import {
   User
 } from '../../models';
+import { UserService } from './user.service';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +17,8 @@ export class AuthService {
   redirectUrl: string;
 
   constructor(
-    private zone: NgZone
+    private zone: NgZone,
+    private $user: UserService
   ) {}
 
   init() {

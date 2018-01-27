@@ -115,4 +115,39 @@ export class RandomDinnerService {
   clearDinners(): void {
     this.dinners = [];
   }
+
+  /**
+   * Calculates if there is a possible combination of
+   * dinners whose meals add up to the sum
+   * Credit to: https://www.geeksforgeeks.org/subset-sum-problem-osum-space/
+   */
+  isSubsetSum(arr: number[], sum: number): boolean {
+    const subset = [
+      Array(sum + 1).fill(0).map(x => false),
+      Array(sum + 1).fill(0).map(x => false)
+    ];
+
+    const a = this.initializeArray(arr.length + 1);
+    const b = this.initializeArray(sum + 1);
+
+    a.forEach((i) => {
+      b.forEach((j) => {
+        if (j === 0) {
+          subset[i % 2][j] = true;
+        } else if (i === 0) {
+          subset[i % 2][j] = false;
+        } else if (arr[i - 1] <= j) {
+          subset[i % 2][j] = subset[(i + 1) % 2][j - arr[i - 1]] || subset[(i + 1) % 2][j]; 
+        } else {
+          subset[i % 2][j] = subset[(i + 1) % 2][j];
+        }
+      });
+    });
+
+    return subset[arr.length % 2][sum];
+  }
+
+  private initializeArray(length: number): number[] {
+    return Array(length).fill(0).map((x, i) => i);
+  }
 }

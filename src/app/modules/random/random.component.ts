@@ -12,8 +12,6 @@ import {
 } from '../../shared/services';
 import 'rxjs/add/operator/switchMap';
 
-// import { Dinner, DinnerDatabase, DinnerDataSource } from './dinner';
-
 @Component({
   selector: 'random',
   templateUrl: './random.component.html',
@@ -21,6 +19,8 @@ import 'rxjs/add/operator/switchMap';
 })
 export class RandomComponent implements OnInit {
   loadingDinners: boolean = false;
+  enoughMeals: boolean = true;
+  canSequence: boolean = true;
 
   constructor(
     private zone: NgZone,
@@ -39,8 +39,31 @@ export class RandomComponent implements OnInit {
         return this.$food.getDinners(this.$auth.user.uid);
       })
       .subscribe((dinners: Dinner[]) => {
+        this.generateRandomDinners();
         this.loadingDinners = false;
-        this.$randomDinner.generateRandomDinners();
       });
+  }
+
+  generateRandomDinners() {
+    const mealsCount = this.$auth.user.mealsCount;
+    const mealsArray = this.$food.dinners.map(d => d.meals);
+
+    if (this.$food.numberOfMeals() >= mealsCount) {
+      if (this.$randomDinner.isSubsetSum(mealsArray, mealsCount)) {
+        this.$randomDinner.generateRandomDinners();
+      } else {
+        this.canSequence = false;
+      }
+      this.enoughMeals = true;
+    } else {
+      this.enoughMeals = false;
+      this.canSequence = true;
+    }
+  }
+
+  mealsCountSelectionChanged() {
+    this.enoughMeals = true;
+    this.canSequence = true;
+    this.$user.saveUser(this.$auth.user);
   }
 }

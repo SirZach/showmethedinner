@@ -24,7 +24,7 @@
     "ci:jit": "cross-env BUILD_E2E=1 npm run lint && npm run test && npm run build:prod && npm run e2e",
     "ci:nobuild": "npm run lint && npm test && npm run e2e",
     "ci:testall": "cross-env BUILD_E2E=1 npm run lint && npm run test && npm run build:prod && npm run e2e && npm run build:aot && npm run e2e",
-    "ci:travis": "cross-env BUILD_E2E=1 npm run lint && npm run build:aot",
+    "ci:travis": "cross-env BUILD_E2E=1 npm run test && npm run build:aot",
     "ci": "npm run ci:testall",
     "clean:dll": "npm run rimraf -- dll",
     "clean:aot": "npm run rimraf -- compiled",
