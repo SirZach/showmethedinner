@@ -17,7 +17,8 @@
       <!-- Show Me The Dinner -->
       <span>Show Me the Dinner!</span>
       <div style="flex: 1 1 auto; min-width: 16px;"></div>
-      <span class="cur-p truncate" *ngIf="$auth.loggedIn" (click)="logout()">{{$auth.user.displayName}}</span>
+      <span class="cur-p truncate" *ngIf="$auth.loggedIn && !$auth.user.photoURL" (click)="logout()">{{$auth.user.displayName}}</span>
+      <img src="{{$auth.user.photoURL}}" class="cur-p" *ngIf="$auth.loggedIn && $auth.user.photoURL" (click)="logout()">
     </mat-toolbar>
   
     <div class="content">
