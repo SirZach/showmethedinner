@@ -1,25 +1,27 @@
-<mat-card class="mb-16">
-  <mat-card-title>Meals</mat-card-title>
-  <mat-card-content>
-    <!-- Meals Select --> 
-    <mat-select placeholder="Meals" [(ngModel)]="$auth.user.mealsCount" (selectionChange)="mealsCountSelectionChanged()"> 
-      <mat-option [value]=6>6</mat-option> 
-      <mat-option [value]=5>5</mat-option> 
-      <mat-option [value]=4>4</mat-option> 
-      <mat-option [value]=3>3</mat-option> 
-      <mat-option [value]=2>2</mat-option> 
-      <mat-option [value]=1>1</mat-option> 
-    </mat-select>
+<div fxLayout="row" fxLayoutAlign="center">
+  <mat-card class="mb-16 filter-card">
+    <mat-card-title>Meals</mat-card-title>
+    <mat-card-content>
+      <!-- Meals Select --> 
+      <mat-select placeholder="Meals" [(ngModel)]="$auth.user.mealsCount" (selectionChange)="mealsCountSelectionChanged()"> 
+        <mat-option [value]=6>6</mat-option> 
+        <mat-option [value]=5>5</mat-option> 
+        <mat-option [value]=4>4</mat-option> 
+        <mat-option [value]=3>3</mat-option> 
+        <mat-option [value]=2>2</mat-option> 
+        <mat-option [value]=1>1</mat-option> 
+      </mat-select>
 
-    <!-- Dinners are loading --> 
-    <mat-progress-bar *ngIf="loadingDinners" mode="indeterminate"></mat-progress-bar>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="generateRandomDinners()">
-      Generate Random Dinners
-    </button>
-  </mat-card-actions>
-</mat-card>
+      <!-- Dinners are loading --> 
+      <mat-progress-bar *ngIf="loadingDinners" mode="indeterminate"></mat-progress-bar>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="generateRandomDinners()">
+        Generate Random Dinners
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
 
 <div class="card-wrapper" *ngIf="!loadingDinners && enoughMeals">
   <dinner *ngFor="let dinner of $randomDinner.dinners"

@@ -14,14 +14,14 @@ html, body{
 .card-wrapper {
   display: flex;
   flex-wrap: wrap;
-  md-card {
+  dinner {
     margin-bottom: 16px;
   }
 }
 
 @media (min-width: 576px) {
   .card-wrapper {
-    md-card {
+    dinner {
       width: calc(100%);
       display: flex;
       flex-direction: column;
@@ -29,9 +29,25 @@ html, body{
   }
 }
 
+@media (min-width: 768px ) and (max-width: 991px) {
+  .card-wrapper {
+    dinner {
+      width: calc(100% / 2 - 6px);
+      flex-shrink: 0;
+      margin-right: 8px;
+      &:nth-of-type(2n) {
+        margin-right: 0;
+      }
+      img {
+        max-height: 400px;
+      }
+    }
+  }
+}
+
 @media (min-width: 992px) {
   .card-wrapper {
-    md-card {
+    dinner {
       width: calc(100% / 3 - 6px);
       flex-shrink: 0;
       margin-right: 8px;
@@ -50,49 +66,3 @@ html, body{
 .jc-c { justify-content: center; }
 .fd-c { flex-direction: column; }
 .mb-16 { margin-bottom: 16px; }
-
-// Table styles
-md-header-cell {
-  &.mat-column-category {
-    max-width: 80px;
-  }
-  &.mat-column-time {
-    text-align: center;
-    max-width: 40px;
-  }
-  &.mat-column-servings {
-    text-align: center;
-    max-width: 60px;
-  }
-  &.mat-column-meals {
-    text-align: center;
-    max-width: 40px;
-  }
-  &.mat-column-replace {
-    text-align: center;
-    max-width: 90px;
-  }
-}
-md-cell {
-  &.mat-column-category {
-    max-width: 80px;
-  }
-  &.mat-column-time {
-    max-width: 40px;
-    text-align: center;
-  }
-  &.mat-column-servings {
-    max-width: 60px;
-    text-align: center;
-  }
-  &.mat-column-meals {
-    max-width: 40px;
-    text-align: center;
-  }
-  &.mat-column-replace {
-    max-width: 90px;
-  }
-  .mat-button {
-    padding-left: 0;
-  }
-}

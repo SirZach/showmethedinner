@@ -1,5 +1,9 @@
-dinner {
-  flex-grow: 1;
-  margin-bottom: 16px;
-  width: 100%;
+.filter-card {
+  max-width: 400px;
+}
+
+@media (max-width: 412px) {
+  .filter-card {
+    max-width: 100%;
+  }
 }

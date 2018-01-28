@@ -20,7 +20,8 @@ import {
 
 @Component({
   selector: 'dinner',
-  templateUrl: './dinner.component.html'
+  templateUrl: './dinner.component.html',
+  styleUrls: ['./dinner.component.scss']
 })
 export class DinnerComponent implements OnInit {
   @Input() dinner: Dinner;
