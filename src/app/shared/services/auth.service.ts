@@ -28,7 +28,18 @@ export class AuthService {
     if (this.auth.currentUser) {
       this.loggedIn = true;
       this.user = new User(this.auth.currentUser);
+      this.setUserToFirebaseUser();
     }
+  }
+
+  /**
+   * The user from the authentication is good enough to get the app going
+   * But we eventually want to use our firebase user instead of the auth user
+   * in order to get the correct metadata about the user
+   */
+  private setUserToFirebaseUser() {
+    this.$user.getUser(this.auth.currentUser.uid)
+      .then(u => this.user = new User(u));
   }
 
   /**
@@ -41,6 +52,7 @@ export class AuthService {
         this.user = new User(result.user);
         this.loggedIn = true;
         this.zone.run(() => {});
+        this.setUserToFirebaseUser();
         
         return this.user;
       })
