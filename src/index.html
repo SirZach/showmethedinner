@@ -22,34 +22,48 @@
   <script src="/webpack-dev-server.js"></script>
   <% } %>
 
-  <!-- Async Google Analytics: change UA-71073175-1 to be your site's ID -->
-  <script>
-    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-    ga('create', 'UA-71073175-1', 'auto');
-    ga('send', 'pageview');
-  </script>
-  <script async src="https://www.google-analytics.com/analytics.js"></script>
   <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
   <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase-firestore.js"></script>
 
-  <script>
-    // Initialize Firebase
-    var config = {
-      apiKey: "AIzaSyCZ7Ci8X2zT5Jh5vvlzyOa6Bl2enOFoRUo",
-      authDomain: "enduring-victor-175321.firebaseapp.com",
-      databaseURL: "https://enduring-victor-175321.firebaseio.com",
-      projectId: "enduring-victor-175321",
-      storageBucket: "",
-      messagingSenderId: "203358340372"
-    };
-    // firebase.initializeApp(config);
-    firebase.initializeApp({
-      apiKey: "AIzaSyCZ7Ci8X2zT5Jh5vvlzyOa6Bl2enOFoRUo",
-      authDomain: "enduring-victor-175321.firebaseapp.com",
-      projectId: "enduring-victor-175321"
-    });
-  </script>
-  <!-- End Google Analytics -->
+  <% if (!htmlWebpackPlugin.options.metadata.isDevServer) { %>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyCZ7Ci8X2zT5Jh5vvlzyOa6Bl2enOFoRUo",
+        authDomain: "enduring-victor-175321.firebaseapp.com",
+        databaseURL: "https://enduring-victor-175321.firebaseio.com",
+        projectId: "enduring-victor-175321",
+        storageBucket: "",
+        messagingSenderId: "203358340372"
+      };
+      // firebase.initializeApp(config);
+      firebase.initializeApp({
+        apiKey: "AIzaSyCZ7Ci8X2zT5Jh5vvlzyOa6Bl2enOFoRUo",
+        authDomain: "enduring-victor-175321.firebaseapp.com",
+        projectId: "enduring-victor-175321"
+      });
+    </script>
+  <% } %>
+
+  <% if (htmlWebpackPlugin.options.metadata.isDevServer) { %>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyCRBe7uq4Yb-Oy_8hi4fWm5K1px2lIW3pw",
+        authDomain: "dev-dinner.firebaseapp.com",
+        databaseURL: "https://dev-dinner.firebaseio.com",
+        projectId: "dev-dinner",
+        storageBucket: "",
+        messagingSenderId: "203358340372"
+      };
+      // firebase.initializeApp(config);
+      firebase.initializeApp({
+        apiKey: "AIzaSyCRBe7uq4Yb-Oy_8hi4fWm5K1px2lIW3pw",
+        authDomain: "dev-dinner.firebaseapp.com",
+        projectId: "dev-dinner"
+      });
+    </script>
+  <% } %>
 
   <!-- CSS will be injected by webpack here -->
   <!-- Preload link tags will be injected by webpack here -->
