@@ -48,9 +48,11 @@ export class RandomComponent implements OnInit {
     const mealsCount = this.$auth.user.mealsCount;
     const mealsArray = this.$food.dinners.map(d => d.meals);
 
+    this.$randomDinner.clearDinners();
+
     if (this.$food.numberOfMeals() >= mealsCount) {
       if (this.$randomDinner.isSubsetSum(mealsArray, mealsCount)) {
-        this.$randomDinner.generateRandomDinners();
+        this.$randomDinner.generateRandomDinners(this.$food.dinners, mealsCount);
       } else {
         this.canSequence = false;
       }

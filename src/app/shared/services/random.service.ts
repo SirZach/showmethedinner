@@ -6,20 +6,16 @@ import {
   Dinner,
   User
 } from '../../models';
-import {
-  AuthService,
-  FoodService
-} from '../../shared/services';
+
+interface IndexTracker {
+  [propName: number]: boolean;
+}
 
 @Injectable()
 export class RandomDinnerService {
   dinners: Dinner[] = [];
 
-  constructor(
-    private zone: NgZone,
-    private $auth: AuthService,
-    private $food: FoodService
-  ) {}
+  constructor(private zone: NgZone) {}
 
   /**
    * Remove the dinner from the database
@@ -32,37 +28,80 @@ export class RandomDinnerService {
   }
 
   /** Find a dinner to add */
-  addDinner(): void {
-    let randomIndex = this.getRandomIndex(this.$food.dinners.length);
+  addDinner(foodDinners: Dinner[], mealsCount: number): void {
+    const indexTracker: IndexTracker = foodDinners.reduce((prev, dinner, index) => {
+      if (this.indexInUse(index, foodDinners)) {
+        prev[index] = true;
+      } else {
+        prev[index] = false;
+      }
 
-    while (this.indexInUse(randomIndex) || !this.canAdd(this.$food.dinners[randomIndex])) {
-      randomIndex = this.getRandomIndex(this.$food.dinners.length);
+      return prev;
+    }, {});
+    let randomIndex = this.getRandomIndex(indexTracker);
+
+    while (
+      randomIndex > -1 &&
+      (this.indexInUse(randomIndex, foodDinners) || 
+      !this.canAdd(foodDinners[randomIndex], mealsCount)) &&
+      this.anyIndicesLeft(indexTracker)
+    ) {
+      indexTracker[randomIndex] = true;
+      randomIndex = this.getRandomIndex(indexTracker);
     }
-    this.dinners.push(this.$food.dinners[randomIndex]);
+
+    if (randomIndex < 0) {
+      throw new Error(`Can't add any more dinners...`);
+    }
+
+    this.dinners.push(foodDinners[randomIndex]);
+  }
+
+  /**
+   * 
+   * @param indexTracker 
+   */
+  anyIndicesLeft(indexTracker: IndexTracker): boolean {
+    const unusedIndices = Object.keys(indexTracker).filter(i => indexTracker[i] === false);
+
+    return !!unusedIndices.length;
   }
 
   /**
    * Is the dinner within the meals requirement
    * @param dinner Dinner
    */
-  canAdd(dinner: Dinner): boolean {
-    return this.numberOfMealsLeft() - dinner.meals >= 0;
+  canAdd(dinner: Dinner, mealsCount: number): boolean {
+    return this.numberOfMealsLeft(mealsCount) - dinner.meals >= 0;
   }
 
   /**
    * Create a random number
    * @param max max number to create a random number up to
    */
-  getRandomIndex(max: number): number {
-    return Math.floor(Math.random() * max);
+  getRandomIndex(indexTracker: IndexTracker): number {
+    const c = [];
+    const max = Object.keys(indexTracker).length;
+
+    for (let i = 0; i < max; i++) {
+      if (!indexTracker[i]) {
+        c.push(i);
+      }
+    }
+
+    if (c.length === 0) {
+      return -1;
+    }
+
+    return c[Math.floor(Math.random() * c.length)];
   }
 
   /**
-   * Does the index have a sheet dinner already in the database
+   * Does the index have a dinner already in the database
    * @param index number
    */
-  indexInUse(index: number): boolean {
-    const foodServiceDinner = this.$food.dinners[index];
+  indexInUse(index: number, foodDinners: Dinner[]): boolean {
+    const foodServiceDinner = foodDinners[index];
     
     return this.dinners.filter(d => d.id === foodServiceDinner.id).length > 0;
   }
@@ -71,36 +110,38 @@ export class RandomDinnerService {
    * Replace the dinner with 1 or more depending on meals requirements
    * @param dinner Dinner
    */
-  replaceDinner(dinner: Dinner) {
+  replaceDinner(dinner: Dinner, foodDinners: Dinner[], mealsCount: number) {
     this.remove(dinner);
-    this.generateRandomDinners();
+    this.generateRandomDinners(foodDinners, mealsCount);
   }
 
   /**
    * Fill up remaining dinner slots
    */
-  generateRandomDinners(): void {
+  generateRandomDinners(foodDinners: Dinner[], mealsCount: number): void {
     this.clearDinners();
+    let counter = 0;
 
-    if (this.canAddDinner()) {
+    if (this.canAddDinner(mealsCount)) {
       do {
-        this.addDinner();
-      } while (this.canAddDinner());
+        counter++;
+        this.addDinner(foodDinners, mealsCount);
+      } while (this.canAddDinner(mealsCount) && counter < 50);
     }
   }
 
   /**
    * Has the meal requirement been met
    */
-  canAddDinner(): boolean {
-    return this.numberOfMealsLeft() > 0;
+  canAddDinner(mealsCount: number): boolean {
+    return this.numberOfMealsLeft(mealsCount) > 0;
   }
 
   /**
    * How many meals left
    */
-  numberOfMealsLeft(): number {
-    return this.$auth.user.mealsCount - this.numberOfMeals(this.dinners);
+  numberOfMealsLeft(mealsCount: number): number {
+    return mealsCount - this.numberOfMeals(this.dinners);
   }
 
   numberOfMeals(dinners: Dinner[]): number {

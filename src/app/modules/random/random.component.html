@@ -27,7 +27,7 @@
   <dinner *ngFor="let dinner of $randomDinner.dinners"
     [dinner]="dinner"
     [canEdit]=false
-    (onReplace)="$randomDinner.replaceDinner($event)"
+    (onReplace)="$randomDinner.replaceDinner($event, $food.dinners, $auth.user.mealsCount)"
   ></dinner>
 </div>
 
