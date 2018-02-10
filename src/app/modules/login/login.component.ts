@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
     this.loadingUser = true;
     this.$auth.login()
       .then((user: User) => {
-        this.$user.doesUserExist(user)
+        this.$user.getUser(user.uid)
           .then(this.goToDinners.bind(this, user))
           .catch((error) => {
             this.$user.addUser(user)

@@ -18,53 +18,27 @@ export class UserService {
     private zone: NgZone
   ) {}
 
-  init() {
-
-  }
-
-  /**
-   * Returns all users from the database
-   */
-  getUsers(): Promise<User[]> {
-    return firebase
-      .firestore()
-      .collection('users')
-      .get()
-      .then((querySnapshot) => {
-        const users: User[] = [];
-
-        querySnapshot.forEach(doc => users.push(new User(doc.data())));
-        return users;
-      });
-  }
-
-  /**
-   * When logging in with Google Auth, check and see if a corresponding
-   * user model exists in the database
-   * @param user User
-   */
-  doesUserExist(user: User): Promise<boolean> {
-    return this.getUsers()
-      .then((users) => {
-        const foundUser = users.find(u => u.uid === user.uid);
-
-        if (foundUser) {
-          console.debug(`User found`);
-          return true;
-        }
-
-        throw new Error('User not found');
-      });
-  }
+  init() {}
 
   /**
    * Retrieve user from the database by id
    * @param uid User uid
    */
   getUser(uid: string): Promise<User> {
-    return this.getUsers()
-      .then((users) => {
-        return users.find(u => u.uid === uid);
+    return firebase
+      .firestore()
+      .collection('users')
+      .where('uid', '==', uid)
+      .get()
+      .then((querySnapshot) => {
+        const users: User[] = [];
+
+        if (!querySnapshot.docs.length) {
+          throw new Error(`User with uid = ${uid} does not exist`);
+        }
+        
+        querySnapshot.forEach(doc => users.push(new User(doc.data())));
+        return users[0];
       });
   }
 
