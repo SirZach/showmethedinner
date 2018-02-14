@@ -20,6 +20,11 @@ import {
   CenteredLoadingComponent
 } from './components';
 
+// Directives
+import {
+  AutofocusDirective
+} from './directives';
+
 // Pipes
 import {
 
@@ -38,7 +43,10 @@ import {
 
     // SHARED COMPONENTS
     DinnerComponent,
-    CenteredLoadingComponent
+    CenteredLoadingComponent,
+
+    // Directives
+    AutofocusDirective
 
     // Pipes
   ],
@@ -52,7 +60,10 @@ import {
 
     // SHARED COMPONENTS
     DinnerComponent,
-    CenteredLoadingComponent
+    CenteredLoadingComponent,
+
+    // Directives
+    AutofocusDirective
   
     // pipes
   ],
