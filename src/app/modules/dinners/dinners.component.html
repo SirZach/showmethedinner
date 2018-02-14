@@ -4,6 +4,7 @@
     [dinner]="dinner"
     [canEdit]=true
     (onCancel)="revertDinner($event)"
+    (onSave)="$food.sortDinners()"
     ></dinner>
 </div>
 

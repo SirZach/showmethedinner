@@ -24,6 +24,25 @@ export class FoodService {
     this.dinners.push(dinner);
   }
 
+  /**
+   * Sort dinners alphabetically
+   */
+  sortDinners() {
+    this.dinners.sort((a, b) => {
+      const nameA = a.name.toUpperCase(); // ignore upper and lowercase
+      const nameB = b.name.toUpperCase(); // ignore upper and lowercase
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+    
+      // names must be equal
+      return 0;
+    });
+  }
+
   getDinners(uid: string): Promise<Dinner[]> {
     console.debug(`getDinners called with ${uid}`);
     return firebase
@@ -37,6 +56,7 @@ export class FoodService {
           console.debug(doc.data());
           this.pushDinner(new Dinner(Object.assign({}, doc.data(), { id: doc.id })));
         });
+        this.sortDinners();
 
         return this.dinners;
       });
