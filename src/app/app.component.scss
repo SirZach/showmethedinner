@@ -20,6 +20,10 @@ html, body{
 }
 
 @media (max-width: 767px) {
+  mat-sidenav.mat-drawer {
+    background-color: white;
+  }
+
   .card-wrapper {
     dinner {
       width: calc(100%);

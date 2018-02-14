@@ -4,9 +4,15 @@
     [mode]="mobileQuery.matches ? 'over' : 'side'"
     [fixedInViewport]="mobileQuery.matches">
     <mat-nav-list>
-      <div *ngIf="mobileQuery.matches" style="min-width: 50vw;"></div>
-      <a *ngIf="$auth.user" mat-list-item routerLink="/random/{{$auth.user.uid}}" routerLinkActive="active" (click)="snav.close()">Get Dinners</a>
-      <a *ngIf="$auth.user" mat-list-item routerLink="/dinners/{{$auth.user.uid}}" routerLinkActive="active" (click)="snav.close()">All Dinners</a>
+      <ng-container *ngIf="mobileQuery.matches">
+        <div style="min-width: 50vw;"></div>
+        <a mat-list-item routerLink="/random" routerLinkActive="active" (click)="snav.close()">Get Dinners</a>
+        <a mat-list-item routerLink="/dinners" routerLinkActive="active" (click)="snav.close()">All Dinners</a>
+      </ng-container>
+      <ng-container *ngIf="!mobileQuery.matches">
+        <a mat-list-item routerLink="/random" routerLinkActive="active">Get Dinners</a>
+        <a mat-list-item routerLink="/dinners" routerLinkActive="active">All Dinners</a>
+      </ng-container>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

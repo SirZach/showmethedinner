@@ -11,11 +11,11 @@ const routes: Routes = [
     path: 'login',
     loadChildren: './modules/login/index#LoginModule'
   }, {
-    path: 'random/:userId',
+    path: 'random',
     canActivate: [AuthGuard],
     loadChildren: './modules/random/index#RandomModule'
   }, {
-    path: 'dinners/:userId',
+    path: 'dinners',
     canActivate: [AuthGuard],
     loadChildren: './modules/dinners/index#DinnersModule'
   }

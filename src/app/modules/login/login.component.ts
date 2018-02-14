@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     if (this.$auth.loggedIn) {
-      this.router.navigate(['random', this.$auth.user.uid]);
+      this.router.navigate(['random']);
     }
   }
 
@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
 
   private goToDinners(user: User) {
     this.zone.run(() => { // HAX!!!!!!
-      this.router.navigate(['dinners', user.uid]);
+      this.router.navigate(['dinners']);
     });
   }
 }
