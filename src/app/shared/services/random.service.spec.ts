@@ -194,7 +194,7 @@ describe('RandomService', () => {
     expect($random.anyIndicesLeft(noIndicesLeft)).toBeFalsy();
   });
 
-  it('canReplaceDinner', () => {
+  xit('canReplaceDinner', () => {
     const a = new Dinner({ id: '1', meals: 2 });
     const b = new Dinner({ id: '2', meals: 1 });
     const c = new Dinner({ id: '3', meals: 1 });
