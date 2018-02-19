@@ -1,3 +1,7 @@
 :host {
   display: inline-block;
+  img {
+    min-height: 300px;
+    max-height: 300px;
+  }
 }

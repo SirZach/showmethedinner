@@ -3,6 +3,7 @@
     <mat-card-title>{{dinner.name}}</mat-card-title>
   </mat-card-header>
   <img *ngIf="dinner.image" mat-card-image [src]="dinner.image">
+  <img *ngIf="!dinner.image" mat-card-image src="/assets/showmethedinner.png">
   <div class="fg-1"></div>
   <mat-card-content>
     <!-- NOT EDITING -->
