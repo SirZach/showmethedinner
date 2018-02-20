@@ -13,14 +13,11 @@ export class FoodService {
 
   constructor(private zone: NgZone) {}
 
-  init() {}
-
   setDinners(dinners: Dinner[]) {
     this.dinners = dinners;
   }
 
   pushDinner(dinner: Dinner) {
-    console.debug(`dinner added - ${dinner.name}`);
     this.dinners.push(dinner);
   }
 
