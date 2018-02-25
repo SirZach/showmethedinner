@@ -119,7 +119,6 @@ export class RandomDinnerService {
    * Fill up remaining dinner slots
    */
   generateRandomDinners(foodDinners: Dinner[], mealsCount: number): void {
-    this.clearDinners();
     let counter = 0;
 
     if (this.canAddDinner(mealsCount)) {
