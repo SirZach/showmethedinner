@@ -1,4 +1,7 @@
-<div fxLayout="row" fxLayoutAlign="center">
+<!-- Dinners are loading --> 
+<centered-loading *ngIf="loadingDinners"></centered-loading>
+
+<div fxLayout="row" fxLayoutAlign="center" *ngIf="!loadingDinners">
   <mat-card class="mb-16 filter-card">
     <mat-card-title>Meals</mat-card-title>
     <mat-card-content>
@@ -12,8 +15,6 @@
         <mat-option [value]=1>1</mat-option> 
       </mat-select>
 
-      <!-- Dinners are loading --> 
-      <mat-progress-bar *ngIf="loadingDinners" mode="indeterminate"></mat-progress-bar>
     </mat-card-content>
     <mat-card-actions>
       <button mat-raised-button color="primary" (click)="generateRandomDinners()">
