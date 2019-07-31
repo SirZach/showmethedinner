@@ -1,53 +1,35 @@
-// import { NO_ERRORS_SCHEMA } from '@angular/core';
-// import {
-//   inject,
-//   async,
-//   TestBed,
-//   ComponentFixture,
-// } from '@angular/core/testing';
-// import { CdkTableModule } from '@angular/cdk';
-// import { GoogleDriveService } from './google-drive/google-drive.service';
+import { TestBed, async } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { AppComponent } from './app.component';
 
-// /**
-//  * Load the implementations that should be tested
-//  */
-// import { AppComponent } from './app.component';
+describe('AppComponent', () => {
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        RouterTestingModule
+      ],
+      declarations: [
+        AppComponent
+      ],
+    }).compileComponents();
+  }));
 
-// describe(`App`, () => {
-//   let comp: AppComponent;
-//   let fixture: ComponentFixture<AppComponent>;
+  it('should create the app', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.debugElement.componentInstance;
+    expect(app).toBeTruthy();
+  });
 
-//   /**
-//    * async beforeEach
-//    */
-//   beforeEach(async(() => {
-//     TestBed.configureTestingModule({
-//       declarations: [AppComponent],
-//       schemas: [NO_ERRORS_SCHEMA],
-//       imports: [CdkTableModule],
-//       providers: [GoogleDriveService]
-//     })
-//     /**
-//      * Compile template and css
-//      */
-//     .compileComponents();
-//   }));
+  it(`should have as title 'showmethedinner2'`, () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.debugElement.componentInstance;
+    expect(app.title).toEqual('showmethedinner2');
+  });
 
-//   /**
-//    * Synchronous beforeEach
-//    */
-//   beforeEach(() => {
-//     fixture = TestBed.createComponent(AppComponent);
-//     comp    = fixture.componentInstance;
-
-//     /**
-//      * Trigger initial data binding
-//      */
-//     fixture.detectChanges();
-//   });
-
-//   it(`should be initialized`, () => {
-//     expect(fixture).toBeDefined();
-//     expect(comp).toBeDefined();
-//   });
-// });
+  it('should render title in a h1 tag', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelector('h1').textContent).toContain('Welcome to showmethedinner2!');
+  });
+});

@@ -1,81 +1,17 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">    
   <meta charset="utf-8">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Showmethedinner2</title>
+  <base href="/">
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><%= htmlWebpackPlugin.options.title %></title>
-  <meta name="description" content="<%= htmlWebpackPlugin.options.title %>">
-  <!-- base url -->
-  <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
-  <% if (webpackConfig.htmlElements.headTags) { %>
-  <!-- Configured Head Tags  -->
-  <%= webpackConfig.htmlElements.headTags %>
-  <% } %>
-
-
-  <%= htmlWebpackPlugin.files.webpackManifest %>
-
-  <% if (htmlWebpackPlugin.options.metadata.isDevServer && htmlWebpackPlugin.options.metadata.HMR !== true) { %>
-  <!-- Webpack Dev Server reload -->
-  <script src="/webpack-dev-server.js"></script>
-  <% } %>
-
+  <link rel="icon" type="image/x-icon" href="/assets/icon/favicon.ico">
   <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
   <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase-firestore.js"></script>
-
-  <% if (!htmlWebpackPlugin.options.metadata.isDevServer) { %>
-    <script>
-      // Initialize Firebase
-      var config = {
-        apiKey: "AIzaSyCZ7Ci8X2zT5Jh5vvlzyOa6Bl2enOFoRUo",
-        authDomain: "enduring-victor-175321.firebaseapp.com",
-        databaseURL: "https://enduring-victor-175321.firebaseio.com",
-        projectId: "enduring-victor-175321",
-        storageBucket: "",
-        messagingSenderId: "203358340372"
-      };
-      // firebase.initializeApp(config);
-      firebase.initializeApp({
-        apiKey: "AIzaSyCZ7Ci8X2zT5Jh5vvlzyOa6Bl2enOFoRUo",
-        authDomain: "enduring-victor-175321.firebaseapp.com",
-        projectId: "enduring-victor-175321"
-      });
-    </script>
-  <% } %>
-
-  <% if (htmlWebpackPlugin.options.metadata.isDevServer) { %>
-    <script>
-      // Initialize Firebase
-      var config = {
-        apiKey: "AIzaSyCRBe7uq4Yb-Oy_8hi4fWm5K1px2lIW3pw",
-        authDomain: "dev-dinner.firebaseapp.com",
-        databaseURL: "https://dev-dinner.firebaseio.com",
-        projectId: "dev-dinner",
-        storageBucket: "",
-        messagingSenderId: "203358340372"
-      };
-      // firebase.initializeApp(config);
-      firebase.initializeApp({
-        apiKey: "AIzaSyCRBe7uq4Yb-Oy_8hi4fWm5K1px2lIW3pw",
-        authDomain: "dev-dinner.firebaseapp.com",
-        projectId: "dev-dinner"
-      });
-    </script>
-  <% } %>
-
-  <!-- CSS will be injected by webpack here -->
-  <!-- Preload link tags will be injected by webpack here -->
-
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
-
 <body>
-
-  <app>
-    Loading...
-  </app>
-
-  <!-- Scripts will be injected by webpack here -->
+  <app-root></app-root>
 </body>
 </html>

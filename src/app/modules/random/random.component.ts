@@ -1,6 +1,6 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { switchMap } from 'rxjs/operators';
 import {
   Dinner
 } from '../../models';
@@ -10,7 +10,6 @@ import {
   RandomDinnerService,
   UserService
 } from '../../shared/services';
-import 'rxjs/add/operator/switchMap';
 
 @Component({
   selector: 'random',
@@ -33,15 +32,15 @@ export class RandomComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.route.params
-      .switchMap((params: Params) => {
+    this.route.params.pipe(
+      switchMap((params: Params) => {
         this.loadingDinners = true;
         return this.$food.getDinners(this.$auth.user.uid);
       })
-      .subscribe((dinners: Dinner[]) => {
-        this.generateRandomDinners();
-        this.loadingDinners = false;
-      });
+    ).subscribe((dinners: Dinner[]) => {
+      this.generateRandomDinners();
+      this.loadingDinners = false;
+    });
   }
 
   generateRandomDinners() {

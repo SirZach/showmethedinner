@@ -34,10 +34,10 @@
 
 <div *ngIf="!enoughMeals">
   <h1>Not enough meals</h1>
-  <a mat-raised-button routerLink="/dinners/{{$auth.user.uid}}">Add More Dinners</a>
+  <a mat-raised-button routerLink="/dinners">Add More Dinners</a>
 </div>
 
 <div *ngIf="!canSequence">
   <h1>No dinners add up to {{$auth.user.mealsCount}} meals</h1>
-  <a mat-raised-button routerLink="/dinners/{{$auth.user.uid}}">Add More Dinners</a>
+  <a mat-raised-button routerLink="/dinners">Add More Dinners</a>
 </div>

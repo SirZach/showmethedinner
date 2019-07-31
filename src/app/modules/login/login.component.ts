@@ -1,6 +1,5 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
 import {
   AuthService,
   UserService

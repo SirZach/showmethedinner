@@ -38,4 +38,4 @@ const modules = [
   imports: modules,
   exports: modules
 })
-export class CustomMaterialModule { }
+export class MaterialModule { }

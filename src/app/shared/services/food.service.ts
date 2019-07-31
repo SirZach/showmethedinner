@@ -1,17 +1,19 @@
 import { Injectable, NgZone } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import {
   Dinner,
   User
 } from '../../models';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { filter, map } from 'rxjs/operators';
 
 @Injectable()
 export class FoodService {
   dinners: Dinner[] = [];
 
-  constructor(private zone: NgZone) {}
+  constructor(
+    private zone: NgZone,
+    private afs: AngularFirestore
+  ) {}
 
   setDinners(dinners: Dinner[]) {
     this.dinners = dinners;
@@ -42,42 +44,57 @@ export class FoodService {
 
   getDinners(uid: string): Promise<Dinner[]> {
     console.debug(`getDinners called with ${uid}`);
-    return firebase
-      .firestore()
-      .collection('dinners')
-      .where('uid', '==', uid)
-      .get()
-      .then((querySnapshot) => {
-        this.dinners = [];
-        querySnapshot.forEach((doc) => {
-          console.debug(doc.data());
-          this.pushDinner(new Dinner(Object.assign({}, doc.data(), { id: doc.id })));
-        });
-        this.sortDinners();
 
-        return this.dinners;
-      });
+    return this.afs
+      .collection('dinners', ref => ref.where('uid', '==', uid))
+      .get()
+      .pipe(
+        map((dinnerQuerySnapshot) => {
+          this.dinners = [];
+          this.dinners = dinnerQuerySnapshot.docs
+            .map((d) => {
+              return new Dinner(Object.assign({}, d.data(), { id: d.id }));
+            });
+
+          this.sortDinners();
+          return this.dinners;
+        })
+      )
+      .toPromise();
   }
 
-  saveDinner(dinner: Dinner): Promise<Dinner> {
-    if (!dinner.id) {
-      return this.addDinner(dinner);
-    }
-    return firebase
-      .firestore()
-      .doc(`dinners/${dinner.id}`)
-      .update(dinner.toJSON());
+  updateDinner(dinner: Dinner): Promise<Dinner> {
+    return new Promise<Dinner>((resolve, reject) => {
+      this.afs
+        .collection('dinners')
+        .doc(dinner.id)
+        .set(dinner.toJSON())
+        .then(() => resolve(dinner), err => reject(err));
+    });
+  }
+
+  createDinner(dinner: Dinner): Promise<Dinner> {
+    return new Promise<Dinner>((resolve, reject) => {
+      this.afs.collection('dinners')
+        .add(dinner.toJSON())
+        .then(savedDinner => {
+          dinner.id = savedDinner.id;
+          this.pushDinner(dinner);
+          resolve(dinner);
+        }, err => reject(err));
+    });
   }
 
   addDinner(dinner: Dinner): Promise<Dinner> {
-    return firebase
-      .firestore()
-      .collection('dinners')
-      .add(dinner.toJSON())
-      .then((d) => {
-        dinner.id = d.id;
-        return this.saveDinner(dinner);
-      });
+    return new Promise<Dinner>((resolve, reject) => {
+      this.afs.collection('dinners')
+        .add(dinner.toJSON())
+        .then(savedDinner => {
+          debugger;
+          dinner.id = savedDinner.id;
+          return dinner;
+        }, err => reject(err));
+    });
   }
 
   /**
@@ -85,16 +102,17 @@ export class FoodService {
    * @param dinner Dinner
    */
   deleteDinner(dinner: Dinner): Promise<any> {
-    return firebase
-      .firestore()
-      .collection('dinners')
-      .doc(dinner.id)
-      .delete()
-      .then(() => {
-        const foundIndex = this.dinners.findIndex(d => d.id === dinner.id);
-
-        this.dinners.splice(foundIndex, 1);
-      });
+    return new Promise((resolve, reject) => {
+      this.afs
+        .collection('dinners')
+        .doc(dinner.id)
+        .delete()
+        .then(() => {
+          const foundIndex = this.dinners.findIndex(d => d.id === dinner.id);
+          this.dinners.splice(foundIndex, 1);
+          resolve();
+        }, err => reject(err));
+    });
   }
 
   /**

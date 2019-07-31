@@ -1,10 +1,9 @@
 import { Injectable, NgZone } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import {
   User
 } from '../../models';
+import { filter, map } from 'rxjs/operators';
 
 @Injectable()
 export class UserService {
@@ -12,10 +11,10 @@ export class UserService {
   loggedIn: boolean = false;
   provider: any;
   user: User;
-  token: any;
 
   constructor(
-    private zone: NgZone
+    private zone: NgZone,
+    private afs: AngularFirestore
   ) {}
 
   init() {}
@@ -24,22 +23,21 @@ export class UserService {
    * Retrieve user from the database by id
    * @param uid User uid
    */
-  getUser(uid: string): Promise<User> {
-    return firebase
-      .firestore()
-      .collection('users')
-      .where('uid', '==', uid)
-      .get()
-      .then((querySnapshot) => {
-        const users: User[] = [];
-
-        if (!querySnapshot.docs.length) {
-          throw new Error(`User with uid = ${uid} does not exist`);
-        }
-        
-        querySnapshot.forEach(doc => users.push(new User(doc.data())));
-        return users[0];
-      });
+  async getUser(uid: string): Promise<User> {
+    // return Promise.resolve({} as User);
+    try {
+      return this.afs.collection('users')
+        .get()
+        .pipe(map(userQuerySnapshot => {
+          const users = userQuerySnapshot.docs.map(u => u.data());
+          return users.find(u => u.uid === uid);
+        }), map((correctUser) => new User(correctUser)))
+        .toPromise();
+    }
+    catch (e) {
+      debugger;
+      throw e;
+    }
   }
 
   /**
@@ -48,17 +46,16 @@ export class UserService {
    */
   addUser(user: User): Promise<User> {
     const data = user.toJSON();
-    return firebase
-      .firestore()
-      .collection('users')
-      .add(data)
-      .then((snapshot) => {
-        user.id = snapshot.id;
-        return this.saveUser(user);
-      })
-      .catch((e) => {
-        // TODO add error handling
-      });
+
+    return new Promise<User>((resolve, reject) => {
+      return this.afs
+        .collection('users')
+        .add(user.toJSON())
+        .then(userDoc => {
+          user.id = userDoc.id;
+          resolve(user);
+        }, err => reject(err));
+    });
   }
 
   /**
@@ -70,17 +67,22 @@ export class UserService {
       this.getUser(user.uid)
         .then((u) => {
           const userToSave = Object.assign({}, u.toJSON(), user.toJSON());
-          
-          return firebase
-            .firestore()
-            .doc(`users/${u.id}`)
-            .update(userToSave);
+          return new Promise<User>((resolve, reject) => {
+            this.afs
+              .collection('users')
+              .doc(user.id)
+              .update(userToSave)
+              .then(() => resolve(user), err => reject(err));
+          });
         });
     } else {
-      return firebase
-        .firestore()
-        .doc(`users/${user.id}`)
-        .update(user.toJSON());
+      return new Promise<User>((resolve, reject) => {
+        this.afs
+          .collection('users')
+          .doc(user.id)
+          .update(user.toJSON())
+          .then(() => resolve(user), err => reject(err));
+      });
     }
   }
 }

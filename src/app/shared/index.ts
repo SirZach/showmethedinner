@@ -1,4 +1,4 @@
-import { CustomMaterialModule } from './../material';
+import { MaterialModule } from './../material';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -26,9 +26,9 @@ import {
 } from './directives';
 
 // Pipes
-import {
+// import {
 
-} from './pipes';
+// } from './pipes';
 
 @NgModule({
   imports: [
@@ -36,7 +36,7 @@ import {
     ReactiveFormsModule,
     CommonModule,
     RouterModule,
-    CustomMaterialModule,
+    MaterialModule,
     FlexLayoutModule
   ],
   declarations: [
@@ -55,7 +55,7 @@ import {
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    CustomMaterialModule,
+    MaterialModule,
     FlexLayoutModule,
 
     // SHARED COMPONENTS

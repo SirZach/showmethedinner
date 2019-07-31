@@ -7,7 +7,6 @@ import {
   ElementRef,
   ChangeDetectorRef
 } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 
@@ -65,7 +64,7 @@ export class DinnerComponent implements OnInit {
 
   save(dinner: Dinner) {
     if (this.isDinnerValid()) {
-      this.$food.saveDinner(dinner)
+      this.$food.updateDinner(dinner)
         .then(() => {
           this.isEditing = false;
           this.snackbar.open('Dinner saved', 'Got It', { duration: 2000 });

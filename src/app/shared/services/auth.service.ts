@@ -1,11 +1,10 @@
 import { Injectable, NgZone } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import {
   User
 } from '../../models';
 import { UserService } from './user.service';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { auth } from 'firebase/app';
 
 @Injectable()
 export class AuthService {
@@ -13,17 +12,16 @@ export class AuthService {
   loggedIn: boolean = false;
   provider: any;
   user: User;
-  token: any;
   redirectUrl: string;
 
   constructor(
     private zone: NgZone,
-    private $user: UserService
+    private $user: UserService,
+    private afAuth: AngularFireAuth
   ) {}
 
   init() {
-    this.provider = new firebase.auth.GoogleAuthProvider();
-    this.auth = firebase.auth();
+    this.auth = new auth.GoogleAuthProvider();
 
     if (this.auth.currentUser) {
       this.loggedIn = true;
@@ -38,41 +36,40 @@ export class AuthService {
    * in order to get the correct metadata about the user
    */
   private setUserToFirebaseUser() {
-    this.$user.getUser(this.auth.currentUser.uid)
-      .then(u => this.user = new User(u));
+    this.$user.getUser(this.user.uid  || this.auth.currentUser.uid)
+      .then(u => this.user = u);
   }
 
   /**
    * Authenticate the user with Google Auth
    */
-  login(): Promise<User> {
-    return firebase.auth().signInWithPopup(this.provider)
-      .then((result) => {
-        this.token = result.credential.accessToken;
-        this.user = new User(result.user);
-        this.loggedIn = true;
-        this.zone.run(() => {});
-        this.setUserToFirebaseUser();
-        
-        return this.user;
-      })
-      .catch((error) => {
-        // TODO add error handling
-        console.log(error);
-      });
+  async login(): Promise<User> {
+    try {
+      const result = await this.afAuth.auth.signInWithPopup(this.auth);
+      this.user = new User(result.user);
+      this.loggedIn = true;
+      this.zone.run(() => { });
+      this.setUserToFirebaseUser();
+      return this.user;
+    }
+    catch (error) {
+      // TODO add error handling
+      console.log(error);
+      throw error;
+    }
   }
 
   /**
    * Sign the user out
    */
-  logout(): Promise<boolean> {
-    return firebase.auth().signOut()
-      .then(() => {
-        this.loggedIn = false;
-      })
-      .catch((error) => {
-        // TODO add error handling
-        console.log(error);
-      });
+  async logout(): Promise<void> {
+    try {
+      await this.afAuth.auth.signOut();
+      this.loggedIn = false;
+    }
+    catch (error) {
+      // TODO add error handling
+      console.log(error);
+    }
   }
 }
